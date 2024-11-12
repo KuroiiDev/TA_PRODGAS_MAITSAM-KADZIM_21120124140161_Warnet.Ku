@@ -92,7 +92,7 @@ $computers = $computerManager->getComputers();
             <?php
             foreach ($computers as $computer) {
                 $statusColor = $computer['status'] === 'available' ? 'success' : 'danger';
-                $statusText = $computer['status'] === 'available' ? 'Tersedia' : 'Sedang Digunakan';
+                $statusText = $computer['status'] === 'available' ? 'Tersedia' : 'Digunakan';
                 ?>
                 <div class="col">
                     <div class="card text-light computer">
