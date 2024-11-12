@@ -142,7 +142,7 @@ $computers = $computerManager->getComputers();
                                             <input type="hidden" name="computer_status" value="enable">
                                             <button type="submit" class="btn btn-danger btn-sm">Hentikan!</button>
                                         </form>
-
+<!-- 
                                         <p id="timer-<?= $computer['id']; ?>" class="text-danger mt-2"></p>
                                         <script>
                                             let timer<?= $computer['id']; ?> = 5;
@@ -157,9 +157,9 @@ $computers = $computerManager->getComputers();
                                                     timerElement<?= $computer['id']; ?>.textContent = `Waktu: ${timer<?= $computer['id']; ?>} detik`;
                                                 }
                                             }, 1000);
-                                        </script>
-                                    <?php endif; ?>
+                                        </script> -->
 
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>
