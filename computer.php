@@ -137,7 +137,7 @@ $computers = $computerManager->getComputers();
     </div>
 
     <footer class="text-center mt-5">
-        <p>&copy; 2024 Manajemen Warnet Sederhana</p>
+        <p>&copy; 2024 KuroiiDev</p>
     </footer>
 </body>
 

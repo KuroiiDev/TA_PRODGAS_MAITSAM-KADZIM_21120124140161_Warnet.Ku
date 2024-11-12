@@ -71,7 +71,7 @@
         </nav>
     </header>
     <footer>
-        <p>&copy; 2024 Manajemen Warnet Sederhana</p>
+        <p>&copy; 2024 KuroiiDev</p>
     </footer>
 </body>
 
