@@ -18,7 +18,7 @@ $computers = $computerManager->getComputers();
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
-        <style>
+    <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #1F1F1F;
@@ -53,8 +53,12 @@ $computers = $computerManager->getComputers();
             background-color: #14171a;
             color: white;
         }
+
         div.computer {
             background-color: #14171a;
+        }
+        .mini {
+            font-size: 8pt;
         }
     </style>
 </head>
@@ -92,29 +96,37 @@ $computers = $computerManager->getComputers();
             foreach ($computers as $computer) {
                 $statusColor = $computer['status'] === 'available' ? 'success' : 'danger';
                 $statusText = $computer['status'] === 'available' ? 'Tersedia' : 'Sedang Digunakan';
-            ?>
+                ?>
                 <div class="col">
                     <div class="card text-light computer">
                         <div class="card-body">
-                            <h5 class="card-title"><?= $computer['name']; ?></h5>
-                            <p class="card-text">Status: <span class="badge bg-<?= $statusColor; ?>"><?= $statusText; ?></span></p>
-                            <?php if ($computer['status'] === 'available'): ?>
-                                <form action="update_status.php" method="POST">
-                                    <input type="hidden" name="computer_id" value="<?= $computer['id']; ?>">
-                                    <input type="hidden" name="computer_status" value="disable">
-                                    <button type="submit" class="btn btn-primary btn-sm">Pilih</button>
-                                </form>
-                            <?php else: ?>
-                                <form action="update_status.php" method="POST">
-                                    <input type="hidden" name="computer_id" value="<?= $computer['id']; ?>">
-                                    <input type="hidden" name="computer_status" value="enable">
-                                    <button type="submit" class="btn btn-danger btn-sm">Hentikan!</button>
-                                </form>
-                            <?php endif; ?>
+                            <div class="row">
+                                <div class="col">
+                                    <img src="" alt="Logo">
+                                </div>
+                                <div class="col">
+                                    <h5 class="card-title"><?= $computer['name']; ?></h5>
+                                    <p class="card-text">Status: <span
+                                            class="badge mini bg-<?= $statusColor; ?>"><?= $statusText; ?></span></p>
+                                    <?php if ($computer['status'] === 'available'): ?>
+                                        <form action="update_status.php" method="POST">
+                                            <input type="hidden" name="computer_id" value="<?= $computer['id']; ?>">
+                                            <input type="hidden" name="computer_status" value="disable">
+                                            <button type="submit" class="btn btn-primary btn-sm">Pilih</button>
+                                        </form>
+                                    <?php else: ?>
+                                        <form action="update_status.php" method="POST">
+                                            <input type="hidden" name="computer_id" value="<?= $computer['id']; ?>">
+                                            <input type="hidden" name="computer_status" value="enable">
+                                            <button type="submit" class="btn btn-danger btn-sm">Hentikan!</button>
+                                        </form>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            <?php
+                <?php
             }
             ?>
         </div>
