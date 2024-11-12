@@ -57,9 +57,6 @@ $computers = $computerManager->getComputers();
         div.computer {
             background-color: #14171a;
         }
-        .mini {
-            font-size: 8pt;
-        }
     </style>
 </head>
 
@@ -107,7 +104,7 @@ $computers = $computerManager->getComputers();
                                 <div class="col">
                                     <h5 class="card-title"><?= $computer['name']; ?></h5>
                                     <p class="card-text">Status: <span
-                                            class="badge mini bg-<?= $statusColor; ?>"><?= $statusText; ?></span></p>
+                                            class="badge bg-<?= $statusColor; ?>"><?= $statusText; ?></span></p>
                                     <?php if ($computer['status'] === 'available'): ?>
                                         <form action="update_status.php" method="POST">
                                             <input type="hidden" name="computer_id" value="<?= $computer['id']; ?>">
