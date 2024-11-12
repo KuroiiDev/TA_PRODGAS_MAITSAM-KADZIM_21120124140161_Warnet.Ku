@@ -94,7 +94,11 @@ $computers = $computerManager->getComputers();
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         <?php elseif (isset($_GET['error'])): ?>
-            <div class="alert alert-danger">Terjadi kesalahan saat mengubah status.</div>
+            <div class="alert alert-danger alert-dismissible fade show d-flex justify-content-between align-items-center"
+                role="alert">
+                <span>Terjadi kesalahan saat mengubah status.</span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
         <?php endif; ?>
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
             <?php
