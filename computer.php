@@ -57,6 +57,7 @@ $computers = $computerManager->getComputers();
         div.computer {
             background-color: #14171a;
         }
+
         img.logo {
             height: 100px;
         }
@@ -87,7 +88,11 @@ $computers = $computerManager->getComputers();
     <div class="container mt-5">
         <h1 class="text-center mb-4">Daftar Komputer</h1>
         <?php if (isset($_GET['success'])): ?>
-            <div class="alert alert-success">Status berhasil diubah!</div>
+            <div class="alert alert-success alert-dismissible fade show d-flex justify-content-between align-items-center"
+                role="alert">
+                <span>Status berhasil diubah!</span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
         <?php elseif (isset($_GET['error'])): ?>
             <div class="alert alert-danger">Terjadi kesalahan saat mengubah status.</div>
         <?php endif; ?>
