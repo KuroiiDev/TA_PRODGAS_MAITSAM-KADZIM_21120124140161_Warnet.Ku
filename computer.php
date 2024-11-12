@@ -105,7 +105,7 @@ $computers = $computerManager->getComputers();
                                     <?php if ($computer['status'] == 'available'): ?>
                                         <img class="logo" src="computer_image.png" alt="Available">
                                     <?php else: ?>
-                                        <img class="logo" src="computer_image.png" alt="Unavailable">
+                                        <img class="logo" src="computer_image_error.png" alt="Unavailable">
                                     <?php endif; ?>
                                 </div>
                                 <div class="col">
