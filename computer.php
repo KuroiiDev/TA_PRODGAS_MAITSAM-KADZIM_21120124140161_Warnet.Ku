@@ -87,21 +87,31 @@ $computers = $computerManager->getComputers();
     <div class="container mt-5">
         <h1 class="text-center mb-4">Daftar Komputer</h1>
         <?php if (isset($_GET['success'])): ?>
-            <div class="alert alert-success alert-dismissible fade show d-flex justify-content-between align-items-center"
+            <div class="alert alert-success alert-dismissible show d-flex justify-content-between align-items-center"
                 role="alert">
                 <span>Status berhasil diubah!</span>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         <?php elseif (isset($_GET['error'])): ?>
-            <div class="alert alert-danger alert-dismissible fade show d-flex justify-content-between align-items-center"
+            <div class="alert alert-danger alert-dismissible show d-flex justify-content-between align-items-center"
                 role="alert">
                 <span>Terjadi kesalahan saat mengubah status.</span>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         <?php endif; ?>
+        <script>
+            setTimeout(function () {
+                const alerts = document.querySelectorAll('.alert');
+                alerts.forEach(alert => {
+                    alert.classList.remove('show');
+                    alert.classList.add('fade');
+                    setTimeout(() => alert.remove(), 500);
+                });
+            }, 3000);
+        </script>
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
             <?php
-            foreach ($computers as $computer) :
+            foreach ($computers as $computer):
                 $statusColor = $computer['status'] === 'available' ? 'success' : 'danger';
                 $statusText = $computer['status'] === 'available' ? 'Tersedia' : 'Digunakan';
                 ?>
