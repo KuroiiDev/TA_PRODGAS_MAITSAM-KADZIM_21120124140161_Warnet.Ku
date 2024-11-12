@@ -137,12 +137,29 @@ $computers = $computerManager->getComputers();
                                             <button type="submit" class="btn btn-primary btn-sm">Pilih</button>
                                         </form>
                                     <?php else: ?>
-                                        <form action="update_status.php" method="POST">
+                                        <form action="update_status.php" method="POST" id="stop-form-<?= $computer['id']; ?>">
                                             <input type="hidden" name="computer_id" value="<?= $computer['id']; ?>">
                                             <input type="hidden" name="computer_status" value="enable">
                                             <button type="submit" class="btn btn-danger btn-sm">Hentikan!</button>
                                         </form>
+
+                                        <p id="timer-<?= $computer['id']; ?>" class="text-danger mt-2"></p>
+                                        <script>
+                                            let timer<?= $computer['id']; ?> = 5;
+                                            const timerElement<?= $computer['id']; ?> = document.getElementById('timer-<?= $computer['id']; ?>');
+
+                                            const countdown<?= $computer['id']; ?> = setInterval(() => {
+                                                if (timer<?= $computer['id']; ?> <= 0) {
+                                                    clearInterval(countdown<?= $computer['id']; ?>);
+                                                    document.getElementById('stop-form-<?= $computer['id']; ?>').submit();
+                                                } else {
+                                                    timer<?= $computer['id']; ?>--;
+                                                    timerElement<?= $computer['id']; ?>.textContent = `Waktu: ${timer<?= $computer['id']; ?>} detik`;
+                                                }
+                                            }, 1000);
+                                        </script>
                                     <?php endif; ?>
+
                                 </div>
                             </div>
                         </div>
