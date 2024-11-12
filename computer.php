@@ -57,6 +57,9 @@ $computers = $computerManager->getComputers();
         div.computer {
             background-color: #14171a;
         }
+        img.logo {
+            height: 100px;
+        }
     </style>
 </head>
 
@@ -99,7 +102,8 @@ $computers = $computerManager->getComputers();
                         <div class="card-body">
                             <div class="row">
                                 <div class="col">
-                                    <img src="" alt="Logo">
+                                    <?php if ($computer['status'] == 'available'): ?>
+                                    <img class="logo" src="computer_image.png" alt="Logo">
                                 </div>
                                 <div class="col">
                                     <h5 class="card-title"><?= $computer['name']; ?></h5>
