@@ -1,5 +1,4 @@
 <?php
-
 class ComputerManager {
     private $computers = [];
     private $dataFile = 'computers.json';
@@ -21,7 +20,8 @@ class ComputerManager {
     }
 
     private function saveData() {
-        file_put_contents($this->dataFile, json_encode($this->computers));
+        file_put_contents($this->dataFile, 
+        json_encode($this->computers));
     }
 
     public function getComputers() {
