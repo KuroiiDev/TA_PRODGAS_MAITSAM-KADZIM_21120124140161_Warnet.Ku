@@ -103,7 +103,10 @@ $computers = $computerManager->getComputers();
                             <div class="row">
                                 <div class="col">
                                     <?php if ($computer['status'] == 'available'): ?>
-                                    <img class="logo" src="computer_image.png" alt="Logo">
+                                        <img class="logo" src="computer_image.png" alt="Available">
+                                    <?php else: ?>
+                                        <img class="logo" src="computer_image.png" alt="Unavailable">
+                                    <?php endif; ?>
                                 </div>
                                 <div class="col">
                                     <h5 class="card-title"><?= $computer['name']; ?></h5>
