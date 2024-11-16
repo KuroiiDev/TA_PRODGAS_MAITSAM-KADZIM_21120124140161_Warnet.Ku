@@ -1,5 +1,6 @@
 <?php
 $name = "-";
+$user = "-";
 session_start();
 
 if (!(isset($_SESSION['id']))) {
@@ -14,6 +15,7 @@ $result = mysqli_query($conn, $query);
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
     $name = $row['name'];
+    $user = $row['username'];
 }
 ?>
 <!DOCTYPE html>
@@ -94,12 +96,15 @@ if ($result->num_rows > 0) {
                         <a class="nav-link" href="/warnet.ku/computer.php">Komputer</a>
                     </div>
                     <div class="navbar-nav ms-auto">
-                        <a class="nav-link account" href="/warnet.ku/logout.php">O <?php echo $name; ?></a>
+                        <a class="nav-link account" href="/warnet.ku/logout.php">👤 <?php echo $user; ?></a>
                     </div>
                 </div>
             </div>
         </nav>
     </header>
+    <div class="container">
+        <h1 class="text-center">Selamat Datang <b><?php echo $name; ?></b></h1>
+    </div>
     <footer>
         <p>&copy; 2024 KuroiiDev</p>
     </footer>

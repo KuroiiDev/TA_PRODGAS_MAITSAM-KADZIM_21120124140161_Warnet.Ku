@@ -1,5 +1,5 @@
 <?php
-$name = "-";
+$user = "-";
 session_start();
 
 if (!(isset($_SESSION['id']))) {
@@ -13,7 +13,7 @@ $query = "SELECT * FROM account WHERE id = '" . $_SESSION['id'] . "'";
 $result = mysqli_query($conn, $query);
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
-    $name = $row['name'];
+    $user = $row['username'];
 }
 
 require_once 'ComputerManager.php';
@@ -106,7 +106,7 @@ $computers = $computerManager->getComputers();
                         <a class="nav-link active" aria-current="page" href="/warnet.ku/computer.php">Komputer</a>
                     </div>
                     <div class="navbar-nav ms-auto">
-                        <a class="nav-link account" href="/warnet.ku/logout.php">O <?php echo $name; ?></a>
+                        <a class="nav-link account" href="/warnet.ku/logout.php">👤 <?php echo $user; ?></a>
                     </div>
                 </div>
             </div>
