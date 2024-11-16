@@ -61,7 +61,7 @@ if ($result->num_rows > 0) {
             background-color: #ff0000;
             color: white;
         }
-        
+
         nav a.account:hover {
             background-color: #910000;
             color: white;
@@ -82,7 +82,7 @@ if ($result->num_rows > 0) {
     <header>
         <nav class="navbar navbar-expand-lg" data-bs-theme="dark">
             <div class="container-fluid">
-                <a class="navbar-brand" href="/warnet.ku">Warnet.Ku</a>
+                <a class="navbar-brand">Warnet.Ku</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false"
                     aria-label="Toggle navigation">
@@ -94,7 +94,7 @@ if ($result->num_rows > 0) {
                         <a class="nav-link" href="/warnet.ku/computer.php">Komputer</a>
                     </div>
                     <div class="navbar-nav ms-auto">
-                        <a class="nav-link account">O <?php echo $name; ?></a>
+                        <a class="nav-link account" href="/warnet.ku/logout.php">O <?php echo $name; ?></a>
                     </div>
                 </div>
             </div>
