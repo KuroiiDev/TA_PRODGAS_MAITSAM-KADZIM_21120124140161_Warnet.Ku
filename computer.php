@@ -1,4 +1,21 @@
 <?php
+$name = "-";
+session_start();
+
+// if (!(isset($_SESSION['id']))) {
+//     header("Location: /warnet.ku/login.php");
+//     exit();
+// }
+
+include '../config/connection.php';
+
+$query = "SELECT * FROM account WHERE id = '" . $_SESSION['id'] . "'";
+$result = mysqli_query($conn, $query);
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $name = $row['name'];
+}
+
 require_once 'ComputerManager.php';
 
 $computerManager = new ComputerManager();
@@ -77,7 +94,9 @@ $computers = $computerManager->getComputers();
                     <div class="navbar-nav">
                         <a class="nav-link" href="/warnet.ku">Home</a>
                         <a class="nav-link active" aria-current="page" href="/warnet.ku/computer.php">Komputer</a>
-                        <a class="nav-link disabled" aria-disabled="true">Admin</a>
+                    </div>
+                    <div class="navbar-nav ms-auto">
+                        <a class="nav-link ">O Admin</a>
                     </div>
                 </div>
             </div>
@@ -142,7 +161,7 @@ $computers = $computerManager->getComputers();
                                             <input type="hidden" name="computer_status" value="enable">
                                             <button type="submit" class="btn btn-danger btn-sm">Hentikan!</button>
                                         </form>
-                                
+
                                         <p id="timer-<?= $computer['id']; ?>" class="text-danger mt-2"></p>
                                         <!-- <script>
                                             let timer<?= $computer['id']; ?> = 5;
