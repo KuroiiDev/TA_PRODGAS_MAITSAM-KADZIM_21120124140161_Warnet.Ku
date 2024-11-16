@@ -7,14 +7,14 @@ session_start();
 //     exit();
 // }
 
-include '../config/connection.php';
+include 'connection.php';
 
-$query = "SELECT * FROM account WHERE id = '" . $_SESSION['id'] . "'";
-$result = mysqli_query($conn, $query);
-if ($result->num_rows > 0) {
-    $row = $result->fetch_assoc();
-    $name = $row['name'];
-}
+// $query = "SELECT * FROM account WHERE id = '" . $_SESSION['id'] . "'";
+// $result = mysqli_query($conn, $query);
+// if ($result->num_rows > 0) {
+//     $row = $result->fetch_assoc();
+//     $name = $row['name'];
+// }
 
 require_once 'ComputerManager.php';
 
@@ -96,7 +96,7 @@ $computers = $computerManager->getComputers();
                         <a class="nav-link active" aria-current="page" href="/warnet.ku/computer.php">Komputer</a>
                     </div>
                     <div class="navbar-nav ms-auto">
-                        <a class="nav-link ">O Admin</a>
+                        <a class="nav-link ">O <?php echo $name; ?></a>
                     </div>
                 </div>
             </div>

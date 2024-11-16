@@ -2,7 +2,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "cooliah_db";
+$dbname = "warnet_db";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
