@@ -138,7 +138,7 @@ $computers = $computerManager->getComputers();
                 });
             }, 3000);
         </script>
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        <div class="row row-cols-lg-3 g-4">
             <?php
             foreach ($computers as $computer):
                 $statusColor = $computer['status'] === 'available' ? 'success' : 'danger';
