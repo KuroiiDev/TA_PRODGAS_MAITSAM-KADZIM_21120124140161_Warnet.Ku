@@ -1,10 +1,10 @@
 <?php
 session_start();
 
-// if (isset($_SESSION['id'])) {
-//     header('Location: /warnet.ku');
-//     exit;
-// }
+if (isset($_SESSION['id'])) {
+    header('Location: /warnet.ku');
+    exit;
+}
 include 'connection.php';
 
 if (isset($_POST['submit'])) {
@@ -14,7 +14,7 @@ if (isset($_POST['submit'])) {
 
     if ($user != "" || $name != "" || $pass != "") {
 
-        $query = "INSERT INTO account (username, name, password, roles) VALUES ('$user', '$name', '$pass', 'user')";
+        $query = "INSERT INTO account (username, name, password, role) VALUES ('$user', '$name', '$pass', 'user')";
         $result = mysqli_query($conn, $query);
 
         if ($result) {
@@ -48,7 +48,7 @@ if (isset($_POST['submit'])) {
 
         .container {
             max-width: 400px;
-            margin-top: 100px;
+            margin-top: 50px;
             padding: 20px;
             background-color: #14171a;
             border: 1px solid #ddd;
@@ -142,7 +142,7 @@ if (isset($_POST['submit'])) {
                         }, 6000);
                     </script>
                 </form>
-                <p class="text-center">Sudah Punya Akun? <a href="/warnet.ku/register.php">Login</a></p>
+                <p class="text-center">Sudah Punya Akun? <a href="/warnet.ku/login.php">Login</a></p>
             </div>
         </div>
     </div>

@@ -1,10 +1,10 @@
 <?php
 session_start();
 
-// if (isset($_SESSION['id'])) {
-//     header('Location: /warnet.ku');
-//     exit;
-// }
+if (isset($_SESSION['id'])) {
+    header('Location: /warnet.ku');
+    exit;
+}
 include 'connection.php';
 
 if (isset($_POST['submit'])) {

@@ -1,3 +1,21 @@
+<?php
+$name = "-";
+session_start();
+
+if (!(isset($_SESSION['id']))) {
+    header("Location: /warnet.ku/login.php");
+    exit();
+}
+
+include 'connection.php';
+
+$query = "SELECT * FROM account WHERE id = '" . $_SESSION['id'] . "'";
+$result = mysqli_query($conn, $query);
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $name = $row['name'];
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -39,6 +57,16 @@
             background-color: #45a049;
         }
 
+        nav a.account{
+            background-color: #ff0000;
+            color: white;
+        }
+        
+        nav a.account:hover {
+            background-color: #910000;
+            color: white;
+        }
+
         footer {
             text-align: center;
             margin-top: 20px;
@@ -64,7 +92,9 @@
                     <div class="navbar-nav">
                         <a class="nav-link active" aria-current="page" href="/warnet.ku">Home</a>
                         <a class="nav-link" href="/warnet.ku/computer.php">Komputer</a>
-                        <a class="nav-link disabled" aria-disabled="true">Admin</a>
+                    </div>
+                    <div class="navbar-nav ms-auto">
+                        <a class="nav-link account">O <?php echo $name; ?></a>
                     </div>
                 </div>
             </div>
