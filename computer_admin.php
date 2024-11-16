@@ -14,8 +14,8 @@ $result = mysqli_query($conn, $query);
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
     $user = $row['username'];
-    if ($row['role'] == 'admin') {
-        header("Location: /warnet.ku/computer_admin.php");
+    if ($row['role'] != 'admin') {
+        header("Location: /warnet.ku/computer.php");
         exit();
     }
 }
@@ -164,11 +164,11 @@ $computers = $computerManager->getComputers();
                                     <p class="card-text">Status: <span
                                             class="badge bg-<?= $statusColor; ?>"><?= $statusText; ?></span></p>
                                     <?php if ($computer['status'] === 'available'): ?>
-                                        <form action="update_status.php" method="POST">
+                                        <!-- <form action="update_status.php" method="POST">
                                             <input type="hidden" name="computer_id" value="<?= $computer['id']; ?>">
                                             <input type="hidden" name="computer_status" value="disable">
                                             <button type="submit" class="btn btn-primary btn-sm">Pilih</button>
-                                        </form>
+                                        </form> -->
                                     <?php else: ?>
                                         <form action="update_status.php" method="POST" id="stop-form-<?= $computer['id']; ?>">
                                             <input type="hidden" name="computer_id" value="<?= $computer['id']; ?>">
@@ -184,6 +184,33 @@ $computers = $computerManager->getComputers();
                     </div>
                 </div>
             <?php endforeach; ?>
+            <div class="col">
+                <div class="card text-light computer">
+                    <div class="card-body">
+                        <form action="" method="POST">
+                            <h5 class="card-title text-center">Add Computer</h5>
+                            <div class="row justify-content-center">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <div class="form-group">
+                                            <label for="name">Computer Name:</label>
+                                            <input type="text"
+                                                class="form-control bg-dark text-light border-secondary m-1"
+                                                name="computer-name">
+                                        </div>
+                                        <input type="hidden" name="computer_id" value="<?= $computer['id']; ?>">
+                                        <input type="hidden" name="computer_status" value="disable">
+                                    </div>
+                                </div>
+                                <div class="col">
+
+                                    <button type="submit" class="btn btn-primary m-2">+</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
