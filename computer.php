@@ -173,21 +173,6 @@ $computers = $computerManager->getComputers();
                                         </form>
 
                                         <p id="timer-<?= $computer['id']; ?>" class="text-danger mt-2"></p>
-                                        <!-- <script>
-                                            let timer<?= $computer['id']; ?> = 5;
-                                            const timerElement<?= $computer['id']; ?> = document.getElementById('timer-<?= $computer['id']; ?>');
-
-                                            const countdown<?= $computer['id']; ?> = setInterval(() => {
-                                                if (timer<?= $computer['id']; ?> <= 0) {
-                                                    clearInterval(countdown<?= $computer['id']; ?>);
-                                                    document.getElementById('stop-form-<?= $computer['id']; ?>').submit();
-                                                } else {
-                                                    timer<?= $computer['id']; ?>--;
-                                                    timerElement<?= $computer['id']; ?>.textContent = `Waktu: ${timer<?= $computer['id']; ?>} detik`;
-                                                }
-                                            }, 1000);
-                                        </script> -->
-
                                     <?php endif; ?>
                                 </div>
                             </div>
