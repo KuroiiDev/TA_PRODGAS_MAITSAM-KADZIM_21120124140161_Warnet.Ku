@@ -7,7 +7,7 @@ if (!(isset($_SESSION['id']))) {
     exit();
 }
 
-include '../controller/ConnectionController.php';
+include '../controllers/ConnectionController.php';
 
 $query = "SELECT * FROM account WHERE id = '" . $_SESSION['id'] . "'";
 $result = mysqli_query($conn, $query);
@@ -147,7 +147,7 @@ try {
                         <a class="nav-link active" aria-current="page" href="/warnet.ku/views/computer.php">Komputer</a>
                     </div>
                     <div class="navbar-nav ms-auto">
-                        <a class="nav-link account" href="/warnet.ku/views/logout.php">👤 <?php echo $user; ?></a>
+                        <a class="nav-link account" href="/warnet.ku/controllers/LogoutController.php">👤 <?php echo $user; ?></a>
                     </div>
                 </div>
             </div>

@@ -5,7 +5,7 @@ if (isset($_SESSION['id'])) {
     header('Location: /warnet.ku/views/dashboard.php');
     exit;
 }
-include '../controller/ConnectionController.php';
+include '../controllers/ConnectionController.php';
 
 if (isset($_POST['submit'])) {
 
