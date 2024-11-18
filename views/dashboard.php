@@ -96,7 +96,7 @@ if ($result->num_rows > 0) {
                         <a class="nav-link" href="/warnet.ku/views/computer.php">Komputer</a>
                     </div>
                     <div class="navbar-nav ms-auto">
-                        <a class="nav-link account" href="/warnet.ku/views/LogoutController.php">👤 <?php echo $user; ?></a>
+                        <a class="nav-link account" href="/warnet.ku/controllers/LogoutController.php">👤 <?php echo $user; ?></a>
                     </div>
                 </div>
             </div>
