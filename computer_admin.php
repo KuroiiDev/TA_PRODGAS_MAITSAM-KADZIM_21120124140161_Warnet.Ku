@@ -39,6 +39,7 @@ try {
 
             if ($result) {
                 $success = "Komputer Baru Berhasil Ditambahkan!";
+                header("Location: /warnet.ku/computer_admin.php");
             } else {
                 $error = mysqli_error($conn);
             }
@@ -49,7 +50,15 @@ try {
 
     if (isset($_POST['submit-del'])) {
         $id = $_POST['id'];
-        
+        $query = "DELETE FROM computers WHERE id = '$id'";
+        $result = mysqli_query($conn, $query);
+
+        if ($result) {
+            $success = "Komputer Berhasil Dihapus!";
+            header("Location: /warnet.ku/computer_admin.php");
+        } else {
+            $error = mysqli_error($conn);
+        }
     }
 } catch (\Exception $e) {
     $error = $e->getMessage();
@@ -196,14 +205,15 @@ try {
                                                 class="badge bg-<?= $statusColor; ?>"><?= $statusText; ?></span></p>
                                         <?php if ($computer['status'] === 'available'): ?>
                                             <form method="POST">
-                                                <input type="hidden" name="computer_id" value="<?= $computer['id']; ?>">
+                                                <input type="hidden" name="id" value="<?= $computer['id']; ?>">
                                                 <button type="submit" class="btn btn-danger btn-sm" name="submit-del">Hapus</button>
                                             </form>
                                         <?php else: ?>
                                             <form action="update_status.php" method="POST" id="stop-form-<?= $computer['id']; ?>">
                                                 <input type="hidden" name="computer_id" value="<?= $computer['id']; ?>">
                                                 <input type="hidden" name="computer_status" value="enable">
-                                                <button type="submit" class="btn btn-danger btn-sm" name="submit-stop">Hentikan!</button>
+                                                <button type="submit" class="btn btn-danger btn-sm"
+                                                    name="submit-stop">Hentikan!</button>
                                             </form>
                                         <?php endif; ?>
                                     </div>
