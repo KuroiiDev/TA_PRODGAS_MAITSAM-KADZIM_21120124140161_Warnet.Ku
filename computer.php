@@ -20,14 +20,46 @@ if ($result->num_rows > 0) {
     }
 }
 
+$count = 0;
 $query = "SELECT * FROM computers";
 $result = mysqli_query($conn, $query);
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         $computers[] = $row;
+        if ($row['user'] == $_SESSION['id']){
+            $count++;
+        }
     }
     //var_dump($computers);
 
+}
+try {
+    if (isset($_POST['submit'])){
+        $id = $_POST['computer_id'];
+        $status = $_POST['computer_status'];
+        $uid = $_SESSION['id'];
+
+        if ($status == 'unavailable') {  
+            $success = "Mulai Menggunakan Komputer";
+        } else {
+            $success = "Selesai Menggunakan Komputer";
+            $uid = 0;
+        }
+
+        $query = "UPDATE computers SET status = '$status', user = $uid WHERE id = '$id'";
+        $result = mysqli_query($conn, $query);
+
+        if ($result) {
+            header("Location: /warnet.ku/computer.php?success=$success");
+        } else {
+            $error = mysqli_error($conn);
+            header("Location: /warnet.ku/computer.php?error=$error");
+        }
+    }
+
+} catch (\Exception $e) {
+    $error = $e->getMessage();
+    header("Location: /warnet.ku/computer.php?error=$error");
 }
 ?>
 
@@ -124,16 +156,14 @@ if ($result->num_rows > 0) {
 
     <div class="container mt-5">
         <h1 class="text-center mb-4">Daftar Komputer</h1>
-        <?php if (isset($_GET['success'])): ?>
-            <div class="alert alert-success alert-dismissible show d-flex justify-content-between align-items-center"
-                role="alert">
-                <span>Status berhasil diubah!</span>
+        <?php if (isset($_GET['error'])): ?>
+            <div class="alert alert-danger alert-dismissible show d-flex justify-content-between align-items-center">
+                <span><strong>Eror!</strong><br> <?php echo $_GET['error']; ?></span>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
-        <?php elseif (isset($_GET['error'])): ?>
-            <div class="alert alert-danger alert-dismissible show d-flex justify-content-between align-items-center"
-                role="alert">
-                <span>Terjadi kesalahan saat mengubah status.</span>
+        <?php elseif (isset($_GET['success'])): ?>
+            <div class="alert alert-success alert-dismissible show d-flex justify-content-between align-items-center">
+                <span><strong>Sukses!</strong><br> <?php echo $_GET['success']; ?></span>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         <?php endif; ?>
@@ -170,15 +200,15 @@ if ($result->num_rows > 0) {
                                         <h5 class="card-title"><?= $computer['name']; ?></h5>
                                         <p class="card-text">Status: <span
                                                 class="badge bg-<?= $statusColor; ?>"><?= $statusText; ?></span></p>
-                                        <?php if ($computer['status'] === 'available'): ?>
-                                            <form action="update_status.php" method="POST">
+                                        <?php if ($computer['status'] === 'available' && $count == 0): ?>
+                                            <form method="POST">
                                                 <input type="hidden" name="computer_id" value="<?= $computer['id']; ?>">
                                                 <input type="hidden" name="computer_status" value="unavailable">
                                                 <button type="submit" class="btn btn-primary btn-sm" name="submit">Pilih</button>
                                             </form>
                                         <?php else:
                                             if ($_SESSION['id'] == $computer['user']): ?>
-                                                <form action="update_status.php" method="POST" id="stop-form-<?= $computer['id']; ?>">
+                                                <form method="POST" id="stop-form-<?= $computer['id']; ?>">
                                                     <input type="hidden" name="computer_id" value="<?= $computer['id']; ?>">
                                                     <input type="hidden" name="computer_status" value="available">
                                                     <button type="submit" class="btn btn-danger btn-sm" name="submit">Hentikan!</button>

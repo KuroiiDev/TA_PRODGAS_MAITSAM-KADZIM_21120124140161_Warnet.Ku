@@ -31,7 +31,7 @@ if ($result->num_rows > 0) {
 }
 try {
     if (isset($_POST['submit-add'])) {
-        $name = $_POST['name'];
+        $name = $_POST['computer_name'];
 
         if ($name != '') {
             $query = "INSERT INTO computers (name) VALUES ('$name')";
@@ -42,14 +42,16 @@ try {
                 header("Location: /warnet.ku/computer_admin.php?success=$success");
             } else {
                 $error = mysqli_error($conn);
+                header("Location: /warnet.ku/computer.php?error=$error");
             }
         } else {
             $error = "Tolong isi Nama Komputer!";
+            header("Location: /warnet.ku/computer.php?error=$error");
         }
     }
 
     if (isset($_POST['submit-del'])) {
-        $id = $_POST['id'];
+        $id = $_POST['computer_id'];
         $query = "DELETE FROM computers WHERE id = '$id'";
         $result = mysqli_query($conn, $query);
 
@@ -58,10 +60,27 @@ try {
             header("Location: /warnet.ku/computer_admin.php?success=$success");
         } else {
             $error = mysqli_error($conn);
+            header("Location: /warnet.ku/computer.php?error=$error");
+        }
+    }
+
+    if (isset($_POST['submit-stop'])){
+        $id = $_POST['computer_id'];
+
+        $query = "UPDATE computers SET status = 'available', user = 0 WHERE id = '$id'";
+        $result = mysqli_query($conn, $query);
+
+        if ($result) {
+            $success = "Komputer Berhasil Diberhentikan!";
+            header("Location: /warnet.ku/computer_admin.php?success=$success");
+        } else {
+            $error = mysqli_error($conn);
+            header("Location: /warnet.ku/computer_admin.php?error=$error");
         }
     }
 } catch (\Exception $e) {
     $error = $e->getMessage();
+    header("Location: /warnet.ku/computer_admin.php?error=$error");
 }
 
 ?>
@@ -203,18 +222,16 @@ try {
                                         <h5 class="card-title"><?= $computer['name']; ?></h5>
                                         <p class="card-text">Status: <span
                                                 class="badge bg-<?= $statusColor; ?>"><?= $statusText; ?></span></p>
-                                        <?php if ($computer['status'] === 'available'): ?>
+                                        <?php if ($computer['status'] == 'available'): ?>
                                             <form method="POST">
-                                                <input type="hidden" name="id" value="<?= $computer['id']; ?>">
+                                                <input type="hidden" name="computer_id" value="<?= $computer['id']; ?>">
                                                 <button type="submit" class="btn btn-danger btn-sm" name="submit-del">Hapus</button>
                                             </form>
                                         <?php else: ?>
-                                            <form action="update_status.php" method="POST" id="stop-form-<?= $computer['id']; ?>">
-                                                <input type="hidden" name="computer_id" value="<?= $computer['id']; ?>">
-                                                <input type="hidden" name="computer_status" value="enable">
-                                                <button type="submit" class="btn btn-danger btn-sm"
-                                                    name="submit-stop">Hentikan!</button>
-                                            </form>
+                                            <form method="POST" id="stop-form-<?= $computer['id']; ?>">
+                                                    <input type="hidden" name="computer_id" value="<?= $computer['id']; ?>">
+                                                    <button type="submit" class="btn btn-danger btn-sm" name="submit-stop">Hentikan!</button>
+                                                </form>
                                         <?php endif; ?>
                                     </div>
                                 </div>
@@ -237,7 +254,7 @@ try {
                                             <label for="name">Computer Name:</label>
                                             <input type="text"
                                                 class="form-control bg-dark text-light border-secondary m-1"
-                                                name="name">
+                                                name="computer_name">
                                         </div>
                                     </div>
                                 </div>
