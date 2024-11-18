@@ -5,31 +5,11 @@ if (isset($_SESSION['id'])) {
     header('Location: /warnet.ku/views/dashboard.php');
     exit;
 }
-include '../controllers/ConnectionController.php';
 
+include_once '../controllers/AccountController.php';
+$account = new AccountController();
 if (isset($_POST['submit'])) {
-
-    $user = $_POST['user'];
-    $pass = $_POST['pass'];
-
-    if ($user != "" || $pass != "") {
-        $query = "SELECT * FROM account WHERE username  = '$user' AND password = '$pass'";
-        $result = mysqli_query($conn, $query);
-
-        if ($result->num_rows > 0) {
-
-            $row = $result->fetch_assoc();
-
-            $_SESSION['name'] = $row['name'];
-            $_SESSION['id'] = $row['id'];
-            header('Location: /warnet.ku/views/dashboard.php');
-        } else {
-            $error = "Username atau Password Salah!";
-        }
-
-    } else {
-        $error = "Tolong isi Semua Data!";
-    } 
+    $account->login($_POST['user'], $_POST['pass']);
 }
 ?>
 
@@ -68,10 +48,16 @@ if (isset($_POST['submit'])) {
                     <div class="text-center">
                         <input type="submit" name="submit" class="btn btn-success" value="Login" />
                     </div>
-                    <?php if (isset($error)): ?>
+                    <?php if (isset($_GET['error'])): ?>
                         <div
                             class="alert alert-danger alert-dismissible show d-flex justify-content-between align-items-center">
-                            <span><strong>Eror!</strong><br> <?php echo $error; ?></span>
+                            <span><strong>Eror!</strong><br> <?php echo $_GET['error']; ?></span>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    <?php elseif (isset($_GET['success'])): ?>
+                        <div
+                            class="alert alert-success alert-dismissible show d-flex justify-content-between align-items-center">
+                            <span><strong>Sukses!</strong><br> <?php echo $_GET['success']; ?></span>
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     <?php endif; ?>

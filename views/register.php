@@ -5,26 +5,11 @@ if (isset($_SESSION['id'])) {
     header('Location: /warnet.ku/views/dashboard.php');
     exit;
 }
-include '../controllers/ConnectionController.php';
 
+include_once '../controllers/AccountController.php';
+$account = new AccountController();
 if (isset($_POST['submit'])) {
-    $user = $_POST['user'];
-    $name = $_POST['name'];
-    $pass = $_POST['pass'];
-
-    if ($user != "" || $name != "" || $pass != "") {
-
-        $query = "INSERT INTO account (username, name, password, role) VALUES ('$user', '$name', '$pass', 'user')";
-        $result = mysqli_query($conn, $query);
-
-        if ($result) {
-            $success = "Registrasi Sukses!";
-        } else {
-            $error = mysqli_error($conn);
-        }
-    } else {
-        $error = "Tolong isi Semua Data!";
-    }
+    $account->register($_POST['name'], $_POST['user'], $_POST['pass']);
 }
 ?>
 
@@ -68,16 +53,10 @@ if (isset($_POST['submit'])) {
                     <div class="text-center">
                         <input type="submit" name="submit" class="btn btn-success" value="Register" />
                     </div>
-                    <?php if (isset($error)): ?>
+                    <?php if (isset($_GET['error'])): ?>
                         <div
                             class="alert alert-danger alert-dismissible show d-flex justify-content-between align-items-center">
-                            <span><strong>Eror!</strong><br> <?php echo $error; ?></span>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                    <?php elseif (isset($success)): ?>
-                        <div
-                            class="alert alert-success alert-dismissible show d-flex justify-content-between align-items-center">
-                            <span><strong>Sukses!</strong><br> <?php echo $success; ?></span>
+                            <span><strong>Eror!</strong><br> <?php echo $_GET['error']; ?></span>
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     <?php endif; ?>
