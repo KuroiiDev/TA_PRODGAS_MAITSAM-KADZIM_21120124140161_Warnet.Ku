@@ -20,10 +20,12 @@ if ($result->num_rows > 0) {
     }
 }
 
-require_once 'ComputerManager.php';
+$query = "SELECT * FROM computers";
+$result = mysqli_query($conn, $query);
+if ($result->num_rows > 0) {
+    $computers = $result->fetch_assoc();
 
-$computerManager = new ComputerManager();
-$computers = $computerManager->getComputers();
+}
 ?>
 
 <!DOCTYPE html>
@@ -143,47 +145,50 @@ $computers = $computerManager->getComputers();
             }, 3000);
         </script>
         <div class="row row-cols-lg-3 g-4">
-            <?php
-            foreach ($computers as $computer):
-                $statusColor = $computer['status'] === 'available' ? 'success' : 'danger';
-                $statusText = $computer['status'] === 'available' ? 'Tersedia' : 'Digunakan';
-                ?>
-                <div class="col">
-                    <div class="card text-light computer">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col">
-                                    <?php if ($computer['status'] == 'available'): ?>
-                                        <img class="logo" src="computer_image.png" alt="Available">
-                                    <?php else: ?>
-                                        <img class="logo" src="computer_image_error.png" alt="Unavailable">
-                                    <?php endif; ?>
-                                </div>
-                                <div class="col">
-                                    <h5 class="card-title"><?= $computer['name']; ?></h5>
-                                    <p class="card-text">Status: <span
-                                            class="badge bg-<?= $statusColor; ?>"><?= $statusText; ?></span></p>
-                                    <?php if ($computer['status'] === 'available'): ?>
-                                        <form action="update_status.php" method="POST">
-                                            <input type="hidden" name="computer_id" value="<?= $computer['id']; ?>">
-                                            <input type="hidden" name="computer_status" value="disable">
-                                            <button type="submit" class="btn btn-primary btn-sm">Pilih</button>
-                                        </form>
-                                    <?php else: ?>
-                                        <form action="update_status.php" method="POST" id="stop-form-<?= $computer['id']; ?>">
-                                            <input type="hidden" name="computer_id" value="<?= $computer['id']; ?>">
-                                            <input type="hidden" name="computer_status" value="enable">
-                                            <button type="submit" class="btn btn-danger btn-sm">Hentikan!</button>
-                                        </form>
-
-                                        <p id="timer-<?= $computer['id']; ?>" class="text-danger mt-2"></p>
-                                    <?php endif; ?>
+            <?php if (!isset($computers)): ?>
+                <h3 class="m-1">Belum Ada Komputer !</h3>   
+            <?php else:
+                foreach ($computers as $computer):
+                    $statusColor = $computer['status'] === 'available' ? 'success' : 'danger';
+                    $statusText = $computer['status'] === 'available' ? 'Tersedia' : 'Digunakan';
+                    ?>
+                    <div class="col">
+                        <div class="card text-light computer">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col">
+                                        <?php if ($computer['status'] == 'available'): ?>
+                                            <img class="logo" src="computer_image.png" alt="Available">
+                                        <?php else: ?>
+                                            <img class="logo" src="computer_image_error.png" alt="Unavailable">
+                                        <?php endif; ?>
+                                    </div>
+                                    <div class="col">
+                                        <h5 class="card-title"><?= $computer['name']; ?></h5>
+                                        <p class="card-text">Status: <span
+                                                class="badge bg-<?= $statusColor; ?>"><?= $statusText; ?></span></p>
+                                        <?php if ($computer['status'] === 'available'): ?>
+                                            <form action="update_status.php" method="POST">
+                                                <input type="hidden" name="computer_id" value="<?= $computer['id']; ?>">
+                                                <input type="hidden" name="computer_status" value="disable">
+                                                <button type="submit" class="btn btn-primary btn-sm">Pilih</button>
+                                            </form>
+                                        <?php else: ?>
+                                            <form action="update_status.php" method="POST" id="stop-form-<?= $computer['id']; ?>">
+                                                <input type="hidden" name="computer_id" value="<?= $computer['id']; ?>">
+                                                <input type="hidden" name="computer_status" value="enable">
+                                                <button type="submit" class="btn btn-danger btn-sm">Hentikan!</button>
+                                            </form>
+                                        <?php endif; ?>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            <?php endforeach; ?>
+                <?php
+                endforeach;
+            endif;
+            ?>
         </div>
     </div>
 

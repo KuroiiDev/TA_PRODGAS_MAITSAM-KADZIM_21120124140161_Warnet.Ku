@@ -20,10 +20,41 @@ if ($result->num_rows > 0) {
     }
 }
 
-require_once 'ComputerManager.php';
+$query = "SELECT * FROM computers";
+$result = mysqli_query($conn, $query);
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $computers[] = $row;
+    }
+    //var_dump($computers);
 
-$computerManager = new ComputerManager();
-$computers = $computerManager->getComputers();
+}
+try {
+    if (isset($_POST['submit-add'])) {
+        $name = $_POST['name'];
+
+        if ($name != '') {
+            $query = "INSERT INTO computers (name) VALUES ('$name')";
+            $result = mysqli_query($conn, $query);
+
+            if ($result) {
+                $success = "Komputer Baru Berhasil Ditambahkan!";
+            } else {
+                $error = mysqli_error($conn);
+            }
+        } else {
+            $error = "Tolong isi Nama Komputer!";
+        }
+    }
+
+    if (isset($_POST['submit-del'])) {
+        $id = $_POST['id'];
+        
+    }
+} catch (\Exception $e) {
+    $error = $e->getMessage();
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -119,16 +150,14 @@ $computers = $computerManager->getComputers();
 
     <div class="container mt-5">
         <h1 class="text-center mb-4">Daftar Komputer</h1>
-        <?php if (isset($_GET['success'])): ?>
-            <div class="alert alert-success alert-dismissible show d-flex justify-content-between align-items-center"
-                role="alert">
-                <span>Status berhasil diubah!</span>
+        <?php if (isset($error)): ?>
+            <div class="alert alert-danger alert-dismissible show d-flex justify-content-between align-items-center">
+                <span><strong>Eror!</strong><br> <?php echo $error; ?></span>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
-        <?php elseif (isset($_GET['error'])): ?>
-            <div class="alert alert-danger alert-dismissible show d-flex justify-content-between align-items-center"
-                role="alert">
-                <span>Terjadi kesalahan saat mengubah status.</span>
+        <?php elseif (isset($success)): ?>
+            <div class="alert alert-success alert-dismissible show d-flex justify-content-between align-items-center">
+                <span><strong>Sukses!</strong><br> <?php echo $success; ?></span>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         <?php endif; ?>
@@ -140,54 +169,56 @@ $computers = $computerManager->getComputers();
                     alert.classList.add('fade');
                     setTimeout(() => alert.remove(), 500);
                 });
-            }, 3000);
+            }, 5000);
         </script>
         <div class="row row-cols-lg-3 g-4">
-            <?php
-            foreach ($computers as $computer):
-                $statusColor = $computer['status'] === 'available' ? 'success' : 'danger';
-                $statusText = $computer['status'] === 'available' ? 'Tersedia' : 'Digunakan';
-                ?>
-                <div class="col">
-                    <div class="card text-light computer">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col">
-                                    <?php if ($computer['status'] == 'available'): ?>
-                                        <img class="logo" src="computer_image.png" alt="Available">
-                                    <?php else: ?>
-                                        <img class="logo" src="computer_image_error.png" alt="Unavailable">
-                                    <?php endif; ?>
-                                </div>
-                                <div class="col">
-                                    <h5 class="card-title"><?= $computer['name']; ?></h5>
-                                    <p class="card-text">Status: <span
-                                            class="badge bg-<?= $statusColor; ?>"><?= $statusText; ?></span></p>
-                                    <?php if ($computer['status'] === 'available'): ?>
-                                        <!-- <form action="update_status.php" method="POST">
-                                            <input type="hidden" name="computer_id" value="<?= $computer['id']; ?>">
-                                            <input type="hidden" name="computer_status" value="disable">
-                                            <button type="submit" class="btn btn-primary btn-sm">Pilih</button>
-                                        </form> -->
-                                    <?php else: ?>
-                                        <form action="update_status.php" method="POST" id="stop-form-<?= $computer['id']; ?>">
-                                            <input type="hidden" name="computer_id" value="<?= $computer['id']; ?>">
-                                            <input type="hidden" name="computer_status" value="enable">
-                                            <button type="submit" class="btn btn-danger btn-sm">Hentikan!</button>
-                                        </form>
-
-                                        <p id="timer-<?= $computer['id']; ?>" class="text-danger mt-2"></p>
-                                    <?php endif; ?>
+            <?php if (!isset($computers)): ?>
+                <h3 class="m-1">Mohon masukan Komputer!</h3>
+            <?php else:
+                foreach ($computers as $computer):
+                    $statusColor = $computer['status'] === 'available' ? 'success' : 'danger';
+                    $statusText = $computer['status'] === 'available' ? 'Tersedia' : 'Digunakan';
+                    ?>
+                    <div class="col">
+                        <div class="card text-light computer">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col">
+                                        <?php if ($computer['status'] == 'available'): ?>
+                                            <img class="logo" src="computer_image.png" alt="Available">
+                                        <?php else: ?>
+                                            <img class="logo" src="computer_image_error.png" alt="Unavailable">
+                                        <?php endif; ?>
+                                    </div>
+                                    <div class="col">
+                                        <h5 class="card-title"><?= $computer['name']; ?></h5>
+                                        <p class="card-text">Status: <span
+                                                class="badge bg-<?= $statusColor; ?>"><?= $statusText; ?></span></p>
+                                        <?php if ($computer['status'] === 'available'): ?>
+                                            <form method="POST">
+                                                <input type="hidden" name="computer_id" value="<?= $computer['id']; ?>">
+                                                <button type="submit" class="btn btn-danger btn-sm" name="submit-del">Hapus</button>
+                                            </form>
+                                        <?php else: ?>
+                                            <form action="update_status.php" method="POST" id="stop-form-<?= $computer['id']; ?>">
+                                                <input type="hidden" name="computer_id" value="<?= $computer['id']; ?>">
+                                                <input type="hidden" name="computer_status" value="enable">
+                                                <button type="submit" class="btn btn-danger btn-sm" name="submit-stop">Hentikan!</button>
+                                            </form>
+                                        <?php endif; ?>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            <?php endforeach; ?>
+                    <?php
+                endforeach;
+            endif;
+            ?>
             <div class="col">
                 <div class="card text-light computer">
                     <div class="card-body">
-                        <form action="" method="POST">
+                        <form method="POST">
                             <h5 class="card-title text-center">Add Computer</h5>
                             <div class="row justify-content-center">
                                 <div class="col">
@@ -196,15 +227,12 @@ $computers = $computerManager->getComputers();
                                             <label for="name">Computer Name:</label>
                                             <input type="text"
                                                 class="form-control bg-dark text-light border-secondary m-1"
-                                                name="computer-name">
+                                                name="name">
                                         </div>
-                                        <input type="hidden" name="computer_id" value="<?= $computer['id']; ?>">
-                                        <input type="hidden" name="computer_status" value="disable">
                                     </div>
                                 </div>
                                 <div class="col">
-
-                                    <button type="submit" class="btn btn-primary m-2">+</button>
+                                    <button type="submit" class="btn btn-primary m-2" name="submit-add">+</button>
                                 </div>
                             </div>
                         </form>
