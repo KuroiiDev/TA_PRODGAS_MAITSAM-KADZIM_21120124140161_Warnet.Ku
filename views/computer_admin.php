@@ -3,11 +3,11 @@ $user = "-";
 session_start();
 
 if (!(isset($_SESSION['id']))) {
-    header("Location: /warnet.ku/login.php");
+    header("Location: /warnet.ku/views/login.php");
     exit();
 }
 
-include 'connection.php';
+include '../controller/ConnectionController.php';
 
 $query = "SELECT * FROM account WHERE id = '" . $_SESSION['id'] . "'";
 $result = mysqli_query($conn, $query);
@@ -15,7 +15,7 @@ if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
     $user = $row['username'];
     if ($row['role'] != 'admin') {
-        header("Location: /warnet.ku/computer.php");
+        header("Location: /warnet.ku/views/computer.php");
         exit();
     }
 }
@@ -39,14 +39,14 @@ try {
 
             if ($result) {
                 $success = "Komputer Baru Berhasil Ditambahkan!";
-                header("Location: /warnet.ku/computer_admin.php?success=$success");
+                header("Location: /warnet.ku/views/computer_admin.php?success=$success");
             } else {
                 $error = mysqli_error($conn);
-                header("Location: /warnet.ku/computer.php?error=$error");
+                header("Location: /warnet.ku/views/computer.php?error=$error");
             }
         } else {
             $error = "Tolong isi Nama Komputer!";
-            header("Location: /warnet.ku/computer.php?error=$error");
+            header("Location: /warnet.ku/views/computer.php?error=$error");
         }
     }
 
@@ -57,10 +57,10 @@ try {
 
         if ($result) {
             $success = "Komputer Berhasil Dihapus!";
-            header("Location: /warnet.ku/computer_admin.php?success=$success");
+            header("Location: /warnet.ku/views/computer_admin.php?success=$success");
         } else {
             $error = mysqli_error($conn);
-            header("Location: /warnet.ku/computer.php?error=$error");
+            header("Location: /warnet.ku/views/computer.php?error=$error");
         }
     }
 
@@ -72,15 +72,15 @@ try {
 
         if ($result) {
             $success = "Komputer Berhasil Diberhentikan!";
-            header("Location: /warnet.ku/computer_admin.php?success=$success");
+            header("Location: /warnet.ku/views/computer_admin.php?success=$success");
         } else {
             $error = mysqli_error($conn);
-            header("Location: /warnet.ku/computer_admin.php?error=$error");
+            header("Location: /warnet.ku/views/computer_admin.php?error=$error");
         }
     }
 } catch (\Exception $e) {
     $error = $e->getMessage();
-    header("Location: /warnet.ku/computer_admin.php?error=$error");
+    header("Location: /warnet.ku/views/computer_admin.php?error=$error");
 }
 
 ?>
@@ -165,11 +165,11 @@ try {
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                     <div class="navbar-nav">
-                        <a class="nav-link" href="/warnet.ku">Home</a>
-                        <a class="nav-link active" aria-current="page" href="/warnet.ku/computer.php">Komputer</a>
+                        <a class="nav-link" href="/warnet.ku/views/dashboard.php">Home</a>
+                        <a class="nav-link active" aria-current="page" href="/warnet.ku/views/computer.php">Komputer</a>
                     </div>
                     <div class="navbar-nav ms-auto">
-                        <a class="nav-link account" href="/warnet.ku/logout.php">👤 <?php echo $user; ?></a>
+                        <a class="nav-link account" href="/warnet.ku/views/logout.php">👤 <?php echo $user; ?></a>
                     </div>
                 </div>
             </div>
@@ -213,9 +213,9 @@ try {
                                 <div class="row">
                                     <div class="col">
                                         <?php if ($computer['status'] == 'available'): ?>
-                                            <img class="logo" src="computer_image.png" alt="Available">
+                                            <img class="logo" src="../assets/computer_image.png" alt="Available">
                                         <?php else: ?>
-                                            <img class="logo" src="computer_image_error.png" alt="Unavailable">
+                                            <img class="logo" src="../assets/computer_image_error.png" alt="Unavailable">
                                         <?php endif; ?>
                                     </div>
                                     <div class="col">

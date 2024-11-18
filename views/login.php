@@ -2,29 +2,34 @@
 session_start();
 
 if (isset($_SESSION['id'])) {
-    header('Location: /warnet.ku');
+    header('Location: /warnet.ku/views/dashboard.php');
     exit;
 }
-include 'connection.php';
+include '../controller/ConnectionController.php';
 
 if (isset($_POST['submit'])) {
+
     $user = $_POST['user'];
-    $name = $_POST['name'];
     $pass = $_POST['pass'];
 
-    if ($user != "" || $name != "" || $pass != "") {
-
-        $query = "INSERT INTO account (username, name, password, role) VALUES ('$user', '$name', '$pass', 'user')";
+    if ($user != "" || $pass != "") {
+        $query = "SELECT * FROM account WHERE username  = '$user' AND password = '$pass'";
         $result = mysqli_query($conn, $query);
 
-        if ($result) {
-            $success = "Registrasi Sukses!";
+        if ($result->num_rows > 0) {
+
+            $row = $result->fetch_assoc();
+
+            $_SESSION['name'] = $row['name'];
+            $_SESSION['id'] = $row['id'];
+            header('Location: /warnet.ku/views/dashboard.php');
         } else {
-            $error = mysqli_error($conn);
+            $error = "Username atau Password Salah!";
         }
+
     } else {
         $error = "Tolong isi Semua Data!";
-    }
+    } 
 }
 ?>
 
@@ -48,7 +53,7 @@ if (isset($_POST['submit'])) {
 
         .container {
             max-width: 400px;
-            margin-top: 50px;
+            margin-top: 100px;
             padding: 20px;
             background-color: #14171a;
             border: 1px solid #ddd;
@@ -97,13 +102,8 @@ if (isset($_POST['submit'])) {
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-12">
-                <h2 class="text-center">Register</h2>
+                <h2 class="text-center">Login</h2>
                 <form method="POST">
-                    <div class="form-group">
-                        <label for="name">Nama:</label>
-                        <input type="text" class="form-control bg-dark text-light border-secondary" id="name"
-                            name="name">
-                    </div>
                     <div class="form-group">
                         <label for="username">Username:</label>
                         <input type="text" class="form-control bg-dark text-light border-secondary" id="username"
@@ -116,18 +116,12 @@ if (isset($_POST['submit'])) {
                     </div>
 
                     <div class="text-center">
-                        <input type="submit" name="submit" class="btn btn-success" value="Register" />
+                        <input type="submit" name="submit" class="btn btn-success" value="Login" />
                     </div>
                     <?php if (isset($error)): ?>
                         <div
                             class="alert alert-danger alert-dismissible show d-flex justify-content-between align-items-center">
                             <span><strong>Eror!</strong><br> <?php echo $error; ?></span>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                    <?php elseif (isset($success)): ?>
-                        <div
-                            class="alert alert-success alert-dismissible show d-flex justify-content-between align-items-center">
-                            <span><strong>Sukses!</strong><br> <?php echo $success; ?></span>
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     <?php endif; ?>
@@ -142,7 +136,7 @@ if (isset($_POST['submit'])) {
                         }, 6000);
                     </script>
                 </form>
-                <p class="text-center">Sudah Punya Akun? <a href="/warnet.ku/login.php">Login</a></p>
+                <p class="text-center">Tidak Punya Akun? <a href="/warnet.ku/views/register.php">Register</a></p>
             </div>
         </div>
     </div>
