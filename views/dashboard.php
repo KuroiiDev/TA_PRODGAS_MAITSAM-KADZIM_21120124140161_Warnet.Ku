@@ -36,44 +36,7 @@ if ($result->num_rows > 0) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
-
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #1F1F1F;
-        }
-
-        nav {
-            text-align: center;
-            background-color: #14171a;
-        }
-
-        nav a {
-            text-decoration: none;
-            color: white;
-            background-color: #4caf50;
-            padding: 10px 20px;
-            margin: 5px;
-            border-radius: 5px;
-        }
-
-        nav a.active {
-            background-color: #456e47;
-        }
-
-        nav a:hover {
-            background-color: #45a049;
-        }
-
-        footer {
-            text-align: center;
-            margin-top: 20px;
-            padding: 10px;
-            background-color: #14171a;
-            color: white;
-        }
-    </style>
-
+    <link rel="stylesheet" href="../css/dashboardStyle.css">
 </head>
 
 <body class="bg-dark text-light">

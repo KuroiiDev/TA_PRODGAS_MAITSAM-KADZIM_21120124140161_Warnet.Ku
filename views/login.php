@@ -45,57 +45,7 @@ if (isset($_POST['submit'])) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #1F1F1F;
-        }
-
-        .container {
-            max-width: 400px;
-            margin-top: 100px;
-            padding: 20px;
-            background-color: #14171a;
-            border: 1px solid #ddd;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 20px;
-        }
-
-        h2 {
-            color: white;
-        }
-
-        label {
-            color: #bdbdbd;
-        }
-
-        p {
-            color: #bdbdbd;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-control {
-            height: 40px;
-            padding: 10px;
-            font-size: 16px;
-        }
-
-        .btn-success {
-            padding: 10px 20px;
-            font-size: 16px;
-        }
-
-        .btn-success:hover {
-            background-color: #23527c;
-        }
-
-        .text-center {
-            margin-bottom: 20px;
-        }
-    </style>
+    <link rel="stylesheet" href="../css/signStyle.css">
 </head>
 
 <body>
