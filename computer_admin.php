@@ -39,7 +39,7 @@ try {
 
             if ($result) {
                 $success = "Komputer Baru Berhasil Ditambahkan!";
-                header("Location: /warnet.ku/computer_admin.php");
+                header("Location: /warnet.ku/computer_admin.php?success=$success");
             } else {
                 $error = mysqli_error($conn);
             }
@@ -55,7 +55,7 @@ try {
 
         if ($result) {
             $success = "Komputer Berhasil Dihapus!";
-            header("Location: /warnet.ku/computer_admin.php");
+            header("Location: /warnet.ku/computer_admin.php?success=$success");
         } else {
             $error = mysqli_error($conn);
         }
@@ -159,14 +159,14 @@ try {
 
     <div class="container mt-5">
         <h1 class="text-center mb-4">Daftar Komputer</h1>
-        <?php if (isset($error)): ?>
+        <?php if (isset($_GET['error'])): ?>
             <div class="alert alert-danger alert-dismissible show d-flex justify-content-between align-items-center">
-                <span><strong>Eror!</strong><br> <?php echo $error; ?></span>
+                <span><strong>Eror!</strong><br> <?php echo $_GET['error']; ?></span>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
-        <?php elseif (isset($success)): ?>
+        <?php elseif (isset($_GET['success'])): ?>
             <div class="alert alert-success alert-dismissible show d-flex justify-content-between align-items-center">
-                <span><strong>Sukses!</strong><br> <?php echo $success; ?></span>
+                <span><strong>Sukses!</strong><br> <?php echo $_GET['success']; ?></span>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         <?php endif; ?>

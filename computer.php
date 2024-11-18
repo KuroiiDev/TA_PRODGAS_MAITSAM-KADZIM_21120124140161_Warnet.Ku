@@ -23,7 +23,10 @@ if ($result->num_rows > 0) {
 $query = "SELECT * FROM computers";
 $result = mysqli_query($conn, $query);
 if ($result->num_rows > 0) {
-    $computers = $result->fetch_assoc();
+    while ($row = $result->fetch_assoc()) {
+        $computers[] = $row;
+    }
+    //var_dump($computers);
 
 }
 ?>
@@ -146,7 +149,7 @@ if ($result->num_rows > 0) {
         </script>
         <div class="row row-cols-lg-3 g-4">
             <?php if (!isset($computers)): ?>
-                <h3 class="m-1">Belum Ada Komputer !</h3>   
+                <h3 class="m-1">Belum Ada Komputer !</h3>
             <?php else:
                 foreach ($computers as $computer):
                     $statusColor = $computer['status'] === 'available' ? 'success' : 'danger';
@@ -170,22 +173,26 @@ if ($result->num_rows > 0) {
                                         <?php if ($computer['status'] === 'available'): ?>
                                             <form action="update_status.php" method="POST">
                                                 <input type="hidden" name="computer_id" value="<?= $computer['id']; ?>">
-                                                <input type="hidden" name="computer_status" value="disable">
-                                                <button type="submit" class="btn btn-primary btn-sm">Pilih</button>
+                                                <input type="hidden" name="computer_status" value="unavailable">
+                                                <button type="submit" class="btn btn-primary btn-sm" name="submit">Pilih</button>
                                             </form>
-                                        <?php else: ?>
-                                            <form action="update_status.php" method="POST" id="stop-form-<?= $computer['id']; ?>">
-                                                <input type="hidden" name="computer_id" value="<?= $computer['id']; ?>">
-                                                <input type="hidden" name="computer_status" value="enable">
-                                                <button type="submit" class="btn btn-danger btn-sm">Hentikan!</button>
-                                            </form>
-                                        <?php endif; ?>
+                                        <?php else:
+                                            if ($_SESSION['id'] == $computer['user']): ?>
+                                                <form action="update_status.php" method="POST" id="stop-form-<?= $computer['id']; ?>">
+                                                    <input type="hidden" name="computer_id" value="<?= $computer['id']; ?>">
+                                                    <input type="hidden" name="computer_status" value="available">
+                                                    <button type="submit" class="btn btn-danger btn-sm" name="submit">Hentikan!</button>
+                                                </form>
+                                            <?php
+                                            endif;
+                                        endif;
+                                        ?>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                <?php
+                    <?php
                 endforeach;
             endif;
             ?>
