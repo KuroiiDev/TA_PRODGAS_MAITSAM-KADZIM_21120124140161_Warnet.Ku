@@ -7,6 +7,12 @@ if (!(isset($_SESSION['id']))) {
     exit();
 }
 
+include_once '../controllers/AccountController.php';
+$account = new AccountController();
+if (isset($_POST['logout'])) {
+    $account->logout();
+}
+
 include '../controllers/ConnectionController.php';
 
 $query = "SELECT * FROM account WHERE id = '" . $_SESSION['id'] . "'";
@@ -26,7 +32,7 @@ $result = mysqli_query($conn, $query);
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         $computers[] = $row;
-        if ($row['user'] == $_SESSION['id']){
+        if ($row['user'] == $_SESSION['id']) {
             $count++;
         }
     }
@@ -34,12 +40,12 @@ if ($result->num_rows > 0) {
 
 }
 try {
-    if (isset($_POST['submit'])){
+    if (isset($_POST['submit'])) {
         $id = $_POST['computer_id'];
         $status = $_POST['computer_status'];
         $uid = $_SESSION['id'];
 
-        if ($status == 'unavailable') {  
+        if ($status == 'unavailable') {
             $success = "Mulai Menggunakan Komputer";
         } else {
             $success = "Selesai Menggunakan Komputer";
@@ -103,16 +109,6 @@ try {
             background-color: #45a049;
         }
 
-        nav a.account {
-            background-color: #ff0000;
-            color: white;
-        }
-
-        nav a.account:hover {
-            background-color: #910000;
-            color: white;
-        }
-
         footer {
             text-align: center;
             margin-top: 20px;
@@ -147,7 +143,10 @@ try {
                         <a class="nav-link active" aria-current="page" href="/warnet.ku/views/computer.php">Komputer</a>
                     </div>
                     <div class="navbar-nav ms-auto">
-                        <a class="nav-link account" href="/warnet.ku/controllers/LogoutController.php">👤 <?php echo $user; ?></a>
+                        <form method="POST">
+                            <button type="submit" class="nav-link account" name="logout">👤
+                                <?php echo $user; ?></button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -213,7 +212,7 @@ try {
                                                     <input type="hidden" name="computer_status" value="available">
                                                     <button type="submit" class="btn btn-danger btn-sm" name="submit">Hentikan!</button>
                                                 </form>
-                                            <?php
+                                                <?php
                                             endif;
                                         endif;
                                         ?>

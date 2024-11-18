@@ -8,6 +8,12 @@ if (!(isset($_SESSION['id']))) {
     exit();
 }
 
+include_once '../controllers/AccountController.php';
+$account = new AccountController();
+if (isset($_POST['logout'])) {
+    $account->logout();
+}
+
 include '../controllers/ConnectionController.php';
 
 $query = "SELECT * FROM account WHERE id = '" . $_SESSION['id'] . "'";
@@ -59,16 +65,6 @@ if ($result->num_rows > 0) {
             background-color: #45a049;
         }
 
-        nav a.account{
-            background-color: #ff0000;
-            color: white;
-        }
-
-        nav a.account:hover {
-            background-color: #910000;
-            color: white;
-        }
-
         footer {
             text-align: center;
             margin-top: 20px;
@@ -96,7 +92,10 @@ if ($result->num_rows > 0) {
                         <a class="nav-link" href="/warnet.ku/views/computer.php">Komputer</a>
                     </div>
                     <div class="navbar-nav ms-auto">
-                        <a class="nav-link account" href="/warnet.ku/controllers/LogoutController.php">👤 <?php echo $user; ?></a>
+                        <form method="POST">
+                            <button type="submit" class="nav-link account" name="logout">👤
+                                <?php echo $user; ?></button>
+                        </form>
                     </div>
                 </div>
             </div>
