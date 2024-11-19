@@ -31,11 +31,38 @@ class ComputerController
                 }
             }
         }
-        if ($count==0){
+        if ($count == 0) {
             return true;
         } else {
             return false;
         }
     }
 
+    function changeStatus($id, $status)
+    {
+        include 'ConnectionController.php';
+        $uid = $_SESSION['id'];
+
+        try {
+            if ($status == 'unavailable') {
+                $success = "Mulai Menggunakan Komputer";
+            } else {
+                $success = "Selesai Menggunakan Komputer";
+                $uid = 0;
+            }
+
+            $query = "UPDATE computers SET status = '$status', user = $uid WHERE id = '$id'";
+            $result = mysqli_query($conn, $query);
+
+            if ($result) {
+                header("Location: /warnet.ku/views/computer.php?success=$success");
+            } else {
+                $error = mysqli_error($conn);
+                header("Location: /warnet.ku/views/computer.php?error=$error");
+            }
+        } catch (\Exception $e) {
+            $error = $e->getMessage();
+            header("Location: /warnet.ku/views/computer.php?error=$error");
+        }
+    }
 }

@@ -18,36 +18,8 @@ if (isset($_POST['logout'])) {
 include_once '../controllers/ComputerController.php';
 $com = new ComputerController();
 $computers = $com->getComputers();
-
-include '../controllers/ConnectionController.php';
-
-try {
-    if (isset($_POST['submit'])) {
-        $id = $_POST['computer_id'];
-        $status = $_POST['computer_status'];
-        $uid = $_SESSION['id'];
-
-        if ($status == 'unavailable') {
-            $success = "Mulai Menggunakan Komputer";
-        } else {
-            $success = "Selesai Menggunakan Komputer";
-            $uid = 0;
-        }
-
-        $query = "UPDATE computers SET status = '$status', user = $uid WHERE id = '$id'";
-        $result = mysqli_query($conn, $query);
-
-        if ($result) {
-            header("Location: /warnet.ku/views/computer.php?success=$success");
-        } else {
-            $error = mysqli_error($conn);
-            header("Location: /warnet.ku/views/computer.php?error=$error");
-        }
-    }
-
-} catch (\Exception $e) {
-    $error = $e->getMessage();
-    header("Location: /warnet.ku/views/computer.php?error=$error");
+if (isset($_POST['submit'])) {
+    $com->changeStatus($_POST['computer_id'], $_POST['computer_status']);
 }
 ?>
 
