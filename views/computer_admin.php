@@ -24,63 +24,9 @@ if (isset($_POST['submit-add'])) {
 if (isset($_POST['submit-del'])) {
     $com->deleteComputer($_POST['computer_id']);
 }
-
-include '../controllers/ConnectionController.php';
-
-try {
-    // if (isset($_POST['submit-add'])) {
-    //     $name = $_POST['computer_name'];
-
-    //     if ($name != '') {
-    //         $query = "INSERT INTO computers (name) VALUES ('$name')";
-    //         $result = mysqli_query($conn, $query);
-
-    //         if ($result) {
-    //             $success = "Komputer Baru Berhasil Ditambahkan!";
-    //             header("Location: /warnet.ku/views/computer_admin.php?success=$success");
-    //         } else {
-    //             $error = mysqli_error($conn);
-    //             header("Location: /warnet.ku/views/computer.php?error=$error");
-    //         }
-    //     } else {
-    //         $error = "Tolong isi Nama Komputer!";
-    //         header("Location: /warnet.ku/views/computer.php?error=$error");
-    //     }
-    // }
-
-    // if (isset($_POST['submit-del'])) {
-    //     $id = $_POST['computer_id'];
-    //     $query = "DELETE FROM computers WHERE id = '$id'";
-    //     $result = mysqli_query($conn, $query);
-
-    //     if ($result) {
-    //         $success = "Komputer Berhasil Dihapus!";
-    //         header("Location: /warnet.ku/views/computer_admin.php?success=$success");
-    //     } else {
-    //         $error = mysqli_error($conn);
-    //         header("Location: /warnet.ku/views/computer.php?error=$error");
-    //     }
-    // }
-
-    if (isset($_POST['submit-stop'])) {
-        $id = $_POST['computer_id'];
-
-        $query = "UPDATE computers SET status = 'available', user = 0 WHERE id = '$id'";
-        $result = mysqli_query($conn, $query);
-
-        if ($result) {
-            $success = "Komputer Berhasil Diberhentikan!";
-            header("Location: /warnet.ku/views/computer_admin.php?success=$success");
-        } else {
-            $error = mysqli_error($conn);
-            header("Location: /warnet.ku/views/computer_admin.php?error=$error");
-        }
-    }
-} catch (\Exception $e) {
-    $error = $e->getMessage();
-    header("Location: /warnet.ku/views/computer_admin.php?error=$error");
+if (isset($_POST['submit-stop'])) {
+    $com->stopComputer($_POST['computer_id']);
 }
-
 ?>
 
 <!DOCTYPE html>

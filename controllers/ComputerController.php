@@ -6,7 +6,7 @@ class ComputerController
     {
         include 'ConnectionController.php';
 
-        $query = "SELECT * FROM computers";
+        $query = "SELECT * FROM computers ORDER BY name";
         $result = mysqli_query($conn, $query);
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
@@ -110,6 +110,27 @@ class ComputerController
         } catch (\Exception $e) {
             $error = $e->getMessage();
             header("Location: /warnet.ku/views/computer.php?error=$error");
+        }
+    }
+
+    function stopComputer($id)
+    {
+        include 'ConnectionController.php';
+
+        try {
+            $query = "UPDATE computers SET status = 'available', user = 0 WHERE id = '$id'";
+            $result = mysqli_query($conn, $query);
+
+            if ($result) {
+                $success = "Komputer Berhasil Diberhentikan!";
+                header("Location: /warnet.ku/views/computer_admin.php?success=$success");
+            } else {
+                $error = mysqli_error($conn);
+                header("Location: /warnet.ku/views/computer_admin.php?error=$error");
+            }
+        } catch (\Exception $e) {
+            $error = $e->getMessage();
+            header("Location: /warnet.ku/views/computer_admin.php?error=$error");
         }
     }
 }
