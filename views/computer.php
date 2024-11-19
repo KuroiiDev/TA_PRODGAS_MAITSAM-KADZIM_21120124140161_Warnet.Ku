@@ -2,7 +2,7 @@
 $user = "-";
 session_start();
 
-if (!(isset($_SESSION['id']))) {
+if (!isset($_SESSION['id'])) {
     header("Location: /warnet.ku/views/login.php");
     exit();
 }
@@ -100,11 +100,14 @@ if (isset($_POST['submit'])) {
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col">
-                                        <?php if ($computer['status'] == 'available'): ?>
-                                            <img class="logo" src="../assets/computer_image.png" alt="Available">
-                                        <?php else: ?>
-                                            <img class="logo" src="../assets/computer_image_error.png" alt="Unavailable">
-                                        <?php endif; ?>
+                                    <?php switch ($computer['status']):
+                                            case 'available': ?>
+                                                <img class="logo" src="../assets/computer_image.png" alt="Available">
+                                                <?php break;
+                                            default: ?>
+                                                <img class="logo" src="../assets/computer_image_error.png" alt="Unavailable">
+                                                <?php break;
+                                        endswitch; ?>
                                     </div>
                                     <div class="col">
                                         <h5 class="card-title"><?= $computer['name']; ?></h5>

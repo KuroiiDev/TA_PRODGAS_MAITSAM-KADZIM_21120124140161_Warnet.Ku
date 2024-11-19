@@ -3,25 +3,17 @@ $name = "-";
 $user = "-";
 session_start();
 
-if (!(isset($_SESSION['id']))) {
+if (!isset($_SESSION['id'])) {
     header("Location: /warnet.ku/views/login.php");
     exit();
 }
 
 include_once '../controllers/AccountController.php';
 $account = new AccountController();
+$user = $account->getUsername();
+$name = $account->getName();
 if (isset($_POST['logout'])) {
     $account->logout();
-}
-
-include '../controllers/ConnectionController.php';
-
-$query = "SELECT * FROM account WHERE id = '" . $_SESSION['id'] . "'";
-$result = mysqli_query($conn, $query);
-if ($result->num_rows > 0) {
-    $row = $result->fetch_assoc();
-    $name = $row['name'];
-    $user = $row['username'];
 }
 ?>
 <!DOCTYPE html>
