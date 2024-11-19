@@ -9,6 +9,8 @@ if (!(isset($_SESSION['id']))) {
 
 include_once '../controllers/AccountController.php';
 $account = new AccountController();
+$account->routeAdmin('computer_admin.php');
+$user = $account->getUser();
 if (isset($_POST['logout'])) {
     $account->logout();
 }
@@ -19,30 +21,6 @@ $computers = $com->getComputers();
 
 include '../controllers/ConnectionController.php';
 
-$query = "SELECT * FROM account WHERE id = '" . $_SESSION['id'] . "'";
-$result = mysqli_query($conn, $query);
-if ($result->num_rows > 0) {
-    $row = $result->fetch_assoc();
-    $user = $row['username'];
-    if ($row['role'] == 'admin') {
-        header("Location: /warnet.ku/views/computer_admin.php");
-        exit();
-    }
-}
-
-// $count = 0;
-// $query = "SELECT * FROM computers";
-// $result = mysqli_query($conn, $query);
-// if ($result->num_rows > 0) {
-//     while ($row = $result->fetch_assoc()) {
-//         $computers[] = $row;
-//         if ($row['user'] == $_SESSION['id']) {
-//             $count++;
-//         }
-//     }
-//     //var_dump($computers);
-
-// }
 try {
     if (isset($_POST['submit'])) {
         $id = $_POST['computer_id'];
@@ -160,7 +138,7 @@ try {
                                         <h5 class="card-title"><?= $computer['name']; ?></h5>
                                         <p class="card-text">Status: <span
                                                 class="badge bg-<?= $statusColor; ?>"><?= $statusText; ?></span></p>
-                                        <?php if ($computer['status'] == 'available' && $com->notRenting($_SESSION['id'])): ?>
+                                        <?php if ($computer['status'] == 'available' && $com->notRenting()): ?>
                                             <form method="POST">
                                                 <input type="hidden" name="computer_id" value="<?= $computer['id']; ?>">
                                                 <input type="hidden" name="computer_status" value="unavailable">

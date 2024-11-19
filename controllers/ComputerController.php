@@ -16,7 +16,7 @@ class ComputerController
         return $computers;
     }
 
-    function notRenting($id)
+    function notRenting()
     {
         include 'ConnectionController.php';
 
@@ -37,4 +37,5 @@ class ComputerController
             return false;
         }
     }
+
 }

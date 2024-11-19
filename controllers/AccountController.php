@@ -1,6 +1,28 @@
 <?php
 class AccountController
 {
+    function getUser(){
+        include 'ConnectionController.php';
+
+        $query = "SELECT * FROM account WHERE id = '" . $_SESSION['id'] . "'";
+        $result = mysqli_query($conn, $query);
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            return $row['username'];
+        }
+    }
+
+    function getName(){
+        include 'ConnectionController.php';
+
+        $query = "SELECT * FROM account WHERE id = '" . $_SESSION['id'] . "'";
+        $result = mysqli_query($conn, $query);
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            return $row['name'];
+        }
+    }
+
     function logout()
     {
         session_start();
@@ -10,33 +32,33 @@ class AccountController
 
     function login($user, $pass)
     {
-        try{
+        try {
             session_start();
 
             include 'ConnectionController.php';
-    
+
             if ($user != "" || $pass != "") {
                 $query = "SELECT * FROM account WHERE username  = '$user' AND password = '$pass'";
                 $result = mysqli_query($conn, $query);
-    
+
                 if ($result->num_rows > 0) {
-    
+
                     $row = $result->fetch_assoc();
-    
+
                     $_SESSION['name'] = $row['name'];
                     $_SESSION['id'] = $row['id'];
-    
+
                     header('Location: /warnet.ku/views/dashboard.php');
                 } else {
                     $error = "Username atau Password Salah!";
                     header("Location: /warnet.ku/views/login.php?error=$error");
                 }
-    
+
             } else {
                 $error = "Tolong isi Semua Data!";
                 header("Location: /warnet.ku/views/login.php?error=$error");
             }
-        } catch(Exception $e){
+        } catch (Exception $e) {
             $error = $e->getMessage();
             header("Location: /warnet.ku/views/login.php?error=$error");
         }
@@ -44,14 +66,14 @@ class AccountController
 
     function register($name, $user, $pass)
     {
-        try{
+        try {
             include 'ConnectionController.php';
 
             if ($user != "" || $name != "" || $pass != "") {
-    
+
                 $query = "INSERT INTO account (username, name, password, role) VALUES ('$user', '$name', '$pass', 'user')";
                 $result = mysqli_query($conn, $query);
-    
+
                 if ($result) {
                     $success = "Registrasi akun Sukses!";
                     header("Location: /warnet.ku/views/login.php?success=$success");
@@ -63,10 +85,40 @@ class AccountController
                 $error = "Tolong isi Semua Data!";
                 header("Location: /warnet.ku/views/register.php?error=$error");
             }
-        } catch(Exception $e){
+        } catch (Exception $e) {
             $error = $e->getMessage();
             header("Location: /warnet.ku/views/register.php?error=$error");
         }
     }
-        
+
+    function routeUser()
+    {
+        include 'ConnectionController.php';
+
+        $query = "SELECT * FROM account WHERE id = '" . $_SESSION['id'] . "'";
+        $result = mysqli_query($conn, $query);
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            if ($row['role'] == 'user') {
+                header("Location: /warnet.ku/views/".$page);
+                exit();
+            }
+        }
+    }
+
+    function routeAdmin($page)
+    {
+        include 'ConnectionController.php';
+
+        $query = "SELECT * FROM account WHERE id = '" . $_SESSION['id'] . "'";
+        $result = mysqli_query($conn, $query);
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            if ($row['role'] == 'admin') {
+                header("Location: /warnet.ku/views/".$page);
+                exit();
+            }
+        }
+    }
+
 }
