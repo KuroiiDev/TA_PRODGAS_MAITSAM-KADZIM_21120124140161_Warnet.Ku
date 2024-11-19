@@ -16,6 +16,53 @@ class ComputerController
         return $computers;
     }
 
+    function addComputer($name)
+    {
+        include 'ConnectionController.php';
+
+        try {
+            if ($name != '') {
+                $query = "INSERT INTO computers (name) VALUES ('$name')";
+                $result = mysqli_query($conn, $query);
+
+                if ($result) {
+                    $success = "Komputer Baru Berhasil Ditambahkan!";
+                    header("Location: /warnet.ku/views/computer_admin.php?success=$success");
+                } else {
+                    $error = mysqli_error($conn);
+                    header("Location: /warnet.ku/views/computer_admin.php?error=$error");
+                }
+            } else {
+                $error = "Tolong isi Nama Komputer!";
+                header("Location: /warnet.ku/views/computer_admin.php?error=$error");
+            }
+        } catch (\Exception $e) {
+            $error = $e->getMessage();
+            header("Location: /warnet.ku/views/computer_admin.php?error=$error");
+        }
+    }
+
+    function deleteComputer($id)
+    {
+        include 'ConnectionController.php';
+
+        try {
+            $query = "DELETE FROM computers WHERE id = '$id'";
+            $result = mysqli_query($conn, $query);
+
+            if ($result) {
+                $success = "Komputer Berhasil Dihapus!";
+                header("Location: /warnet.ku/views/computer_admin.php?success=$success");
+            } else {
+                $error = mysqli_error($conn);
+                header("Location: /warnet.ku/views/computer.php?error=$error");
+            }
+        } catch (\Exception $e) {
+            $error = $e->getMessage();
+            header("Location: /warnet.ku/views/computer_admin.php?error=$error");
+        }
+    }
+
     function notRenting()
     {
         include 'ConnectionController.php';

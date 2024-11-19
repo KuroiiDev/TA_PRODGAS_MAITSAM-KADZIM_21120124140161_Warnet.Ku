@@ -1,7 +1,7 @@
 <?php
 class AccountController
 {
-    function getUser(){
+    function getUsername(){
         include 'ConnectionController.php';
 
         $query = "SELECT * FROM account WHERE id = '" . $_SESSION['id'] . "'";
@@ -91,7 +91,7 @@ class AccountController
         }
     }
 
-    function routeUser()
+    function routeUser($page)
     {
         include 'ConnectionController.php';
 

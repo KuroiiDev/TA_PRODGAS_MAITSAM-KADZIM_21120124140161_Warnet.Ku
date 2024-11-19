@@ -9,66 +9,58 @@ if (!(isset($_SESSION['id']))) {
 
 include_once '../controllers/AccountController.php';
 $account = new AccountController();
+$account->routeUser('computer.php');
+$user = $account->getUsername();
 if (isset($_POST['logout'])) {
     $account->logout();
 }
 
+include '../controllers/ComputerController.php';
+$com = new ComputerController();
+$computers = $com->getComputers();
+if (isset($_POST['submit-add'])) {
+    $com->addComputer($_POST['computer_name']);
+}
+if (isset($_POST['submit-del'])) {
+    $com->deleteComputer($_POST['computer_id']);
+}
+
 include '../controllers/ConnectionController.php';
 
-$query = "SELECT * FROM account WHERE id = '" . $_SESSION['id'] . "'";
-$result = mysqli_query($conn, $query);
-if ($result->num_rows > 0) {
-    $row = $result->fetch_assoc();
-    $user = $row['username'];
-    if ($row['role'] != 'admin') {
-        header("Location: /warnet.ku/views/computer.php");
-        exit();
-    }
-}
-
-$query = "SELECT * FROM computers";
-$result = mysqli_query($conn, $query);
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $computers[] = $row;
-    }
-    //var_dump($computers);
-
-}
 try {
-    if (isset($_POST['submit-add'])) {
-        $name = $_POST['computer_name'];
+    // if (isset($_POST['submit-add'])) {
+    //     $name = $_POST['computer_name'];
 
-        if ($name != '') {
-            $query = "INSERT INTO computers (name) VALUES ('$name')";
-            $result = mysqli_query($conn, $query);
+    //     if ($name != '') {
+    //         $query = "INSERT INTO computers (name) VALUES ('$name')";
+    //         $result = mysqli_query($conn, $query);
 
-            if ($result) {
-                $success = "Komputer Baru Berhasil Ditambahkan!";
-                header("Location: /warnet.ku/views/computer_admin.php?success=$success");
-            } else {
-                $error = mysqli_error($conn);
-                header("Location: /warnet.ku/views/computer.php?error=$error");
-            }
-        } else {
-            $error = "Tolong isi Nama Komputer!";
-            header("Location: /warnet.ku/views/computer.php?error=$error");
-        }
-    }
+    //         if ($result) {
+    //             $success = "Komputer Baru Berhasil Ditambahkan!";
+    //             header("Location: /warnet.ku/views/computer_admin.php?success=$success");
+    //         } else {
+    //             $error = mysqli_error($conn);
+    //             header("Location: /warnet.ku/views/computer.php?error=$error");
+    //         }
+    //     } else {
+    //         $error = "Tolong isi Nama Komputer!";
+    //         header("Location: /warnet.ku/views/computer.php?error=$error");
+    //     }
+    // }
 
-    if (isset($_POST['submit-del'])) {
-        $id = $_POST['computer_id'];
-        $query = "DELETE FROM computers WHERE id = '$id'";
-        $result = mysqli_query($conn, $query);
+    // if (isset($_POST['submit-del'])) {
+    //     $id = $_POST['computer_id'];
+    //     $query = "DELETE FROM computers WHERE id = '$id'";
+    //     $result = mysqli_query($conn, $query);
 
-        if ($result) {
-            $success = "Komputer Berhasil Dihapus!";
-            header("Location: /warnet.ku/views/computer_admin.php?success=$success");
-        } else {
-            $error = mysqli_error($conn);
-            header("Location: /warnet.ku/views/computer.php?error=$error");
-        }
-    }
+    //     if ($result) {
+    //         $success = "Komputer Berhasil Dihapus!";
+    //         header("Location: /warnet.ku/views/computer_admin.php?success=$success");
+    //     } else {
+    //         $error = mysqli_error($conn);
+    //         header("Location: /warnet.ku/views/computer.php?error=$error");
+    //     }
+    // }
 
     if (isset($_POST['submit-stop'])) {
         $id = $_POST['computer_id'];
