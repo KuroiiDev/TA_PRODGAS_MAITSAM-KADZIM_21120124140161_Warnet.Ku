@@ -104,6 +104,16 @@ class ComputerController
                     }
                 }
             } else {
+                $query = "SELECT * FROM computers WHERE id = '$id'";
+                $result = mysqli_query($conn, $query);
+                if ($result->num_rows > 0) {
+                    $row = $result->fetch_assoc();
+                    if ($row['user'] != $uid) {
+                        $error = "Hanya bisa mengedit komputer anda!";
+                        header("Location: /warnet.ku/views/computer.php?error=$error");
+                        exit();
+                    }
+                }
                 $success = "Selesai Menggunakan Komputer";
                 $uid = 0;
             }

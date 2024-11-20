@@ -10,8 +10,8 @@ if (!isset($_SESSION['id'])) {
 
 include_once '../controllers/AccountController.php';
 $account = new AccountController();
-$user = $account->getUsername();
-$name = $account->getName();
+$user = $account->getUsername($_SESSION['id']);
+$name = $account->getName($_SESSION['id']);
 if (isset($_POST['logout'])) {
     $account->logout();
 }

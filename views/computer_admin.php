@@ -4,7 +4,7 @@ session_start();
 
 $serverTime = date('Y-m-d H:i:s');
 
-if (!(isset($_SESSION['id']))) {
+if (!isset($_SESSION['id'])) {
     header("Location: /warnet.ku/views/login.php");
     exit();
 }
@@ -12,7 +12,7 @@ if (!(isset($_SESSION['id']))) {
 include_once '../controllers/AccountController.php';
 $account = new AccountController();
 $account->routeUser('computer.php');
-$user = $account->getUsername();
+$user = $account->getUsername($_SESSION['id']);
 if (isset($_POST['logout'])) {
     $account->logout();
 }
@@ -148,9 +148,10 @@ if (isset($_POST['submit-stop'])) {
                                                 <button type="submit" class="btn btn-danger btn-sm" name="submit-del">Hapus</button>
                                             </form>
                                         <?php else: ?>
+                                            <p class="card-text"><?php echo $account->getUsername($computer['user']); ?></p>
                                             <form method="POST" id="stop-form-<?= $computer['id']; ?>">
                                                 <input type="hidden" name="computer_id" value="<?= $computer['id']; ?>">
-                                                <button type="submit" class="btn btn-danger btn-sm"
+                                                <button type="submit" class="btn btn-primary btn-sm"
                                                     name="submit-stop">Hentikan!</button>
                                             </form>
                                         <?php endif; ?>
@@ -167,19 +168,19 @@ if (isset($_POST['submit-stop'])) {
                 <div class="card text-light computer">
                     <div class="card-body">
                         <form method="POST">
-                            <h5 class="card-title text-center">Add Computer</h5>
                             <div class="row justify-content-center">
                                 <div class="col">
                                     <div class="form-group">
                                         <div class="form-group">
-                                            <label for="name">Computer Name:</label>
+                                            <label for="name">Nama Komputer:</label>
                                             <input type="text"
-                                                class="form-control bg-dark text-light border-secondary m-1"
-                                                name="computer_name">
+                                            class="form-control bg-dark text-light border-secondary m-1"
+                                            name="computer_name">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col">
+                                    <h5 class="card-title text-center">Tambah</h5>
                                     <button type="submit" class="btn btn-primary m-2" name="submit-add">+</button>
                                 </div>
                             </div>

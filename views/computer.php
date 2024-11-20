@@ -10,7 +10,7 @@ if (!isset($_SESSION['id'])) {
 include_once '../controllers/AccountController.php';
 $account = new AccountController();
 $account->routeAdmin('computer_admin.php');
-$user = $account->getUsername();
+$user = $account->getUsername($_SESSION['id']);
 if (isset($_POST['logout'])) {
     $account->logout();
 }

@@ -1,10 +1,10 @@
 <?php
 class AccountController
 {
-    function getUsername(){
+    function getUsername($id){
         include 'ConnectionController.php';
 
-        $query = "SELECT * FROM account WHERE id = '" . $_SESSION['id'] . "'";
+        $query = "SELECT * FROM account WHERE id = '" . $id . "'";
         $result = mysqli_query($conn, $query);
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
@@ -12,10 +12,10 @@ class AccountController
         }
     }
 
-    function getName(){
+    function getName($id){
         include 'ConnectionController.php';
 
-        $query = "SELECT * FROM account WHERE id = '" . $_SESSION['id'] . "'";
+        $query = "SELECT * FROM account WHERE id = '" . $id . "'";
         $result = mysqli_query($conn, $query);
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
