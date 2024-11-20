@@ -108,7 +108,11 @@ class ComputerController
                 $result = mysqli_query($conn, $query);
                 if ($result->num_rows > 0) {
                     $row = $result->fetch_assoc();
-                    if ($row['user'] != $uid) {
+                    if ($row['user'] == 0){
+                        $error = "Komputer telah Dihentikan Admin!";
+                        header("Location: /warnet.ku/views/computer.php?error=$error");
+                        exit();
+                    }else if ($row['user'] != $uid) {
                         $error = "Hanya bisa mengedit komputer anda!";
                         header("Location: /warnet.ku/views/computer.php?error=$error");
                         exit();

@@ -116,80 +116,84 @@ if (isset($_POST['submit-stop'])) {
                 });
             }, 5000);
         </script>
-        <div class="row row-cols-lg-3 g-4">
-            <?php if (!isset($computers)): ?>
-                <h3 class="m-1">Mohon masukan Komputer!</h3>
-            <?php else:
-                foreach ($computers as $computer):
-                    $statusColor = $computer['status'] === 'available' ? 'success' : 'danger';
-                    $statusText = $computer['status'] === 'available' ? 'Tersedia' : 'Digunakan';
-                    ?>
-                    <div class="col">
-                        <div class="card text-light computer">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col">
-                                        <?php switch ($computer['status']):
-                                            case 'available': ?>
-                                                <img class="logo" src="../assets/computer_image.png" alt="Available">
-                                                <?php break;
-                                            default: ?>
-                                                <img class="logo" src="../assets/computer_image_error.png" alt="Unavailable">
-                                                <?php break;
-                                        endswitch; ?>
-                                    </div>
-                                    <div class="col">
-                                        <h5 class="card-title"><?= $computer['name']; ?></h5>
-                                        <p class="card-text">Status: <span
-                                                class="badge bg-<?= $statusColor; ?>"><?= $statusText; ?></span></p>
-                                        <?php if ($computer['status'] == 'available'): ?>
-                                            <form method="POST">
-                                                <input type="hidden" name="computer_id" value="<?= $computer['id']; ?>">
-                                                <button type="submit" class="btn btn-danger btn-sm" name="submit-del">Hapus</button>
-                                            </form>
-                                        <?php else: ?>
-                                            <p class="card-text"><?php echo $account->getUsername($computer['user']); ?></p>
-                                            <form method="POST" id="stop-form-<?= $computer['id']; ?>">
-                                                <input type="hidden" name="computer_id" value="<?= $computer['id']; ?>">
-                                                <button type="submit" class="btn btn-primary btn-sm"
-                                                    name="submit-stop">Hentikan!</button>
-                                            </form>
-                                        <?php endif; ?>
+        <div class="row row-cols-lg-3 g-4 computer-card">
+            // ini kodenya diisi pake js
+        </div>
+        <div class="mt-5 mx-4">
+            <div class="card text-light computer">
+                <div class="card-body">
+                    <form method="POST">
+                        <h5 class="card-title text-center">Tambahkan Komputer</h5>
+                        <label for="name">Nama Komputer:</label>
+                        <div class="row justify-content-center">
+                            <div class="col">
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control bg-dark text-light border-secondary m-1"
+                                            name="computer_name">
                                     </div>
                                 </div>
+                            </div>
+                            <div class="col">
+                                <button type="submit" class="btn btn-primary m-2" name="submit-add">Tambah</button>
                             </div>
                         </div>
-                    </div>
-                    <?php
-                endforeach;
-            endif;
-            ?>
-            <div class="col">
-                <div class="card text-light computer">
-                    <div class="card-body">
-                        <form method="POST">
-                            <div class="row justify-content-center">
-                                <div class="col">
-                                    <div class="form-group">
-                                        <div class="form-group">
-                                            <label for="name">Nama Komputer:</label>
-                                            <input type="text"
-                                            class="form-control bg-dark text-light border-secondary m-1"
-                                            name="computer_name">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <h5 class="card-title text-center">Tambah</h5>
-                                    <button type="submit" class="btn btn-primary m-2" name="submit-add">+</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
+
     </div>
+
+    <script>
+        function loadComputers() {
+            fetch('/warnet.ku/layouts/getComputersAdmin.php')
+                .then(response => response.json())
+                .then(data => {
+                    const computerContainer = document.querySelector('.computer-card');
+                    computerContainer.innerHTML = '';
+
+                    if (data.length == 0) {
+                        computerContainer.innerHTML = '<h3 class="m-1">Mohon masukan Komputer!</h3>';
+                    } else {
+                        data.forEach(computer => {
+                            const statusColor = computer.status == 'available' ? 'success' : 'danger';
+                            const statusText = computer.status == 'available' ? 'Tersedia' : 'Digunakan';
+                            const user = computer.status == 'available' ? '' : `<p class="card-text">${computer.user_name}</p>`;
+
+                            computerContainer.innerHTML += `
+                            <div class="col">
+                                <div class="card text-light computer">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col">
+                                                <img class="logo" src="../assets/${computer.status === 'available' ? 'computer_image.png' : 'computer_image_error.png'}" alt="${statusText}">
+                                            </div>
+                                            <div class="col">
+                                                <h5 class="card-title">${computer.name}</h5>
+                                                <p class="card-text">Status: <span class="badge bg-${statusColor}">${statusText}</span></p>
+                                                ${user}
+                                                <form method="POST">
+                                                    <input type="hidden" name="computer_id" value="${computer.id}">
+                                                    ${computer.status === 'available' ? `
+                                                        <button type="submit" class="btn btn-danger btn-sm" name="submit-del">Hapus</button>` : `
+                                                        <button type="submit" class="btn btn-primary btn-sm" name="submit-stop">Hentikan!</button>`}
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        });
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        setInterval(loadComputers, 1000);
+        loadComputers();
+    </script>
 
     <footer class="text-center mt-5">
         <p>&copy; 2024 KuroiiDev</p>
