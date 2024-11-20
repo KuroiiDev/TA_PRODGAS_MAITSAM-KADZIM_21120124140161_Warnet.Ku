@@ -2,6 +2,8 @@
 $user = "-";
 session_start();
 
+$serverTime = date('Y-m-d H:i:s');
+
 if (!(isset($_SESSION['id']))) {
     header("Location: /warnet.ku/views/login.php");
     exit();
@@ -71,6 +73,27 @@ if (isset($_POST['submit-stop'])) {
     </header>
 
     <div class="container mt-5">
+        <div class="text-center">
+            <span id="current-time"></span>
+        </div>
+        <script>
+            // Ambil waktu server dari PHP
+            const serverTime = new Date("<?php echo $serverTime; ?>");
+
+            function updateClock() {
+                serverTime.setSeconds(serverTime.getSeconds() + 1);
+
+                const hours = String(serverTime.getHours()).padStart(2, '0');
+                const minutes = String(serverTime.getMinutes()).padStart(2, '0');
+                const seconds = String(serverTime.getSeconds()).padStart(2, '0');
+
+                document.getElementById('current-time').textContent = `Jam Server: ${hours}:${minutes}:${seconds}`;
+            }
+
+            setInterval(updateClock, 1000);
+            updateClock();
+        </script>
+
         <h1 class="text-center mb-4">Daftar Komputer</h1>
         <?php if (isset($_GET['error'])): ?>
             <div class="alert alert-danger alert-dismissible show d-flex justify-content-between align-items-center">

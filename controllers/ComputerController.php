@@ -93,6 +93,16 @@ class ComputerController
         try {
             if ($status == 'unavailable') {
                 $success = "Mulai Menggunakan Komputer";
+                $query = "SELECT * FROM computers WHERE id = '$id'";
+                $result = mysqli_query($conn, $query);
+                if ($result->num_rows > 0) {
+                    $row = $result->fetch_assoc();
+                    if ($row['user'] != 0) {
+                        $error = "Komputer sudah dipinjam!";
+                        header("Location: /warnet.ku/views/computer.php?error=$error");
+                        exit();
+                    }
+                }
             } else {
                 $success = "Selesai Menggunakan Komputer";
                 $uid = 0;
