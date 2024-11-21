@@ -19,7 +19,6 @@ if (isset($_POST['logout'])) {
 
 include '../controllers/ComputerController.php';
 $com = new ComputerController();
-$computers = $com->getComputers();
 if (isset($_POST['submit-add'])) {
     $com->addComputer($_POST['computer_name']);
 }
@@ -116,8 +115,8 @@ if (isset($_POST['submit-stop'])) {
                 });
             }, 5000);
         </script>
-        <div class="row row-cols-lg-3 g-4 computer-card">
-            // ini kodenya diisi pake js
+        <div class="row row-cols-lg-3 g-4 computer-container">
+            <!-- ini kodenya diisi pake Js -->
         </div>
         <div class="mt-5 mx-4">
             <div class="card text-light computer">
@@ -150,16 +149,16 @@ if (isset($_POST['submit-stop'])) {
             fetch('/warnet.ku/layouts/getComputersAdmin.php')
                 .then(response => response.json())
                 .then(data => {
-                    const computerContainer = document.querySelector('.computer-card');
+                    const computerContainer = document.querySelector('.computer-container');
                     computerContainer.innerHTML = '';
 
                     if (data.length == 0) {
                         computerContainer.innerHTML = '<h3 class="m-1">Mohon masukan Komputer!</h3>';
                     } else {
                         data.forEach(computer => {
-                            const statusColor = computer.status == 'available' ? 'success' : 'danger';
-                            const statusText = computer.status == 'available' ? 'Tersedia' : 'Digunakan';
-                            const user = computer.status == 'available' ? '' : `<p class="card-text">${computer.user_name}</p>`;
+                            const statusColor = computer.status === 'available' ? 'success' : 'danger';
+                            const statusText = computer.status === 'available' ? 'Tersedia' : 'Digunakan';
+                            const user = computer.status === 'available' ? '' : `<p class="card-text">${computer.user_name}</p>`;
 
                             computerContainer.innerHTML += `
                             <div class="col">
@@ -167,7 +166,7 @@ if (isset($_POST['submit-stop'])) {
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col">
-                                                <img class="logo" src="../assets/${computer.status === 'available' ? 'computer_image.png' : 'computer_image_error.png'}" alt="${statusText}">
+                                                <img class="logo" src="../assets/${computer.status === 'available' ? 'computer_image.png' : 'computer_image_error.png'}" alt="${computer.status}">
                                             </div>
                                             <div class="col">
                                                 <h5 class="card-title">${computer.name}</h5>

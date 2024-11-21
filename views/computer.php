@@ -87,60 +87,70 @@ if (isset($_POST['submit'])) {
                 });
             }, 3000);
         </script>
-        <div class="row row-cols-lg-3 g-4">
-            <?php if (!isset($computers)): ?>
-                <h3 class="m-1">Belum Ada Komputer !</h3>
-            <?php else:
-                foreach ($computers as $computer):
-                    $statusColor = $computer['status'] === 'available' ? 'success' : 'danger';
-                    $statusText = $computer['status'] === 'available' ? 'Tersedia' : 'Digunakan';
-                    ?>
-                    <div class="col">
-                        <div class="card text-light computer">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col">
-                                    <?php switch ($computer['status']):
-                                            case 'available': ?>
-                                                <img class="logo" src="../assets/computer_image.png" alt="Available">
-                                                <?php break;
-                                            default: ?>
-                                                <img class="logo" src="../assets/computer_image_error.png" alt="Unavailable">
-                                                <?php break;
-                                        endswitch; ?>
-                                    </div>
-                                    <div class="col">
-                                        <h5 class="card-title"><?= $computer['name']; ?></h5>
-                                        <p class="card-text">Status: <span
-                                                class="badge bg-<?= $statusColor; ?>"><?= $statusText; ?></span></p>
-                                        <?php if ($computer['status'] == 'available' && $com->notRenting()): ?>
-                                            <form method="POST">
-                                                <input type="hidden" name="computer_id" value="<?= $computer['id']; ?>">
-                                                <input type="hidden" name="computer_status" value="unavailable">
-                                                <button type="submit" class="btn btn-primary btn-sm" name="submit">Pilih</button>
-                                            </form>
-                                        <?php else:
-                                            if ($_SESSION['id'] == $computer['user']): ?>
-                                                <form method="POST" id="stop-form-<?= $computer['id']; ?>">
-                                                    <input type="hidden" name="computer_id" value="<?= $computer['id']; ?>">
-                                                    <input type="hidden" name="computer_status" value="available">
-                                                    <button type="submit" class="btn btn-danger btn-sm" name="submit">Hentikan!</button>
+        <div class="row row-cols-lg-3 g-4 computer-container">
+            <!-- Diisi Pake Js -->
+        </div>
+    </div>
+
+    <script>
+        function loadComputers() {
+            fetch('/warnet.ku/layouts/getComputers.php')
+                .then(response => response.json())
+                .then(data => {
+                    const computerContainer = document.querySelector('.computer-container');
+                    computerContainer.innerHTML = '';
+
+                    if (data.length === 0) {
+                        computerContainer.innerHTML = '<h3 class="m-1">Mohon maaf, belum terdapat Komputer</h3>';
+                    } else {
+                        data.forEach(computer => {
+                            const statusColor = computer.status === 'available' ? 'success' : 'danger';
+                            const statusText = computer.status === 'available' ? 'Tersedia' : 'Digunakan';
+
+                            let actionButtons = '';
+                            if (computer.status === 'available' && computer.notRenting) {
+                                actionButtons = `
+                                <input type="hidden" name="computer_status" value="unavailable">
+                                <button type="submit" class="btn btn-primary btn-sm" name="submit">Pilih</button>
+                            `;
+                            } else if (computer.isCurrentUser) {
+                                actionButtons = `
+                                <input type="hidden" name="computer_status" value="available">
+                                <button type="submit" class="btn btn-danger btn-sm" name="submit">Hentikan!</button>
+                            `;
+                            }
+
+                            computerContainer.innerHTML += `
+                            <div class="col">
+                                <div class="card text-light computer">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col">
+                                                <img class="logo" src="../assets/${computer.status === 'available' ? 'computer_image.png' : 'computer_image_error.png'}" alt="${statusText}">
+                                            </div>
+                                            <div class="col">
+                                                <h5 class="card-title">${computer.name}</h5>
+                                                <p class="card-text">Status: <span class="badge bg-${statusColor}">${statusText}</span></p>
+                                                <form method="POST">
+                                                    <input type="hidden" name="computer_id" value="${computer.id}">
+                                                    ${actionButtons}
                                                 </form>
-                                                <?php
-                                            endif;
-                                        endif;
-                                        ?>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <?php
-                endforeach;
-            endif;
-            ?>
-        </div>
-    </div>
+                        `;
+                        });
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        setInterval(loadComputers, 3000);
+        loadComputers();
+    </script>
+
 
     <footer class="text-center mt-5">
         <p>&copy; 2024 KuroiiDev</p>
