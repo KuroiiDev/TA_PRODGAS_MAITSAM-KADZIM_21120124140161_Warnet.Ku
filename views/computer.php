@@ -17,7 +17,6 @@ if (isset($_POST['logout'])) {
 
 include_once '../controllers/ComputerController.php';
 $com = new ComputerController();
-$computers = $com->getComputers();
 if (isset($_POST['submit'])) {
     $com->changeStatus($_POST['computer_id'], $_POST['computer_status'], $_POST['computer_time']);
 }
