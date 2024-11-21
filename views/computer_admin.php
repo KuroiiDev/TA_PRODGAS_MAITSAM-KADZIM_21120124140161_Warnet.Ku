@@ -146,7 +146,7 @@ if (isset($_POST['submit-stop'])) {
 
     <script>
         function loadComputers() {
-            fetch('/warnet.ku/layouts/getComputersAdmin.php')
+            fetch('/warnet.ku/models/getComputersAdmin.php')
                 .then(response => response.json())
                 .then(data => {
                     const computerContainer = document.querySelector('.computer-container');
@@ -185,6 +185,7 @@ if (isset($_POST['submit-stop'])) {
                                                 `${minutes} menit ${seconds} detik`;
                                         } else {
                                             document.getElementById(`countdown-${computer.id}`).textContent = 'Waktu Habis!';
+                                            stopComputer(computer.id);
                                             //document.getElementById(`stop-${computer.id}`).submit();
                                         }
                                     }, 1000);
@@ -217,6 +218,25 @@ if (isset($_POST['submit-stop'])) {
                             </div>
                         `;
                         });
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        function stopComputer(computerId) {
+            fetch('/warnet.ku/models/stopComputer.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `computer_id=${computerId}`
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        console.log(`Komputer dengan ID ${computerId} dihentikan otomatis.`);
+                    } else {
+                        console.error('Gagal menghentikan komputer');
                     }
                 })
                 .catch(error => console.error('Error:', error));

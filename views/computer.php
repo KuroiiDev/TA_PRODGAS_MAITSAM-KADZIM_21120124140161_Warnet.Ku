@@ -93,7 +93,7 @@ if (isset($_POST['submit'])) {
 
     <script>
         function loadComputers() {
-            fetch('/warnet.ku/layouts/getComputers.php')
+            fetch('/warnet.ku/models/getComputers.php')
                 .then(response => response.json())
                 .then(data => {
                     const computerContainer = document.querySelector('.computer-container');

@@ -146,6 +146,17 @@ class ComputerController
         }
     }
 
+    function stopComputerEnd($id)
+    {
+        include 'ConnectionController.php';
+        $time = null;
+        try {
+            $query = "UPDATE computers SET status = 'available', user = 0, time = '$time' WHERE id = '$id'";
+            $result = mysqli_query($conn, $query);
+        } catch (\Exception $e) {
+        }
+    }
+
     function stopComputer($id)
     {
         include 'ConnectionController.php';
