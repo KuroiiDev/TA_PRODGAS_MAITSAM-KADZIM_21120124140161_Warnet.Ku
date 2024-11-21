@@ -85,13 +85,21 @@ class ComputerController
         }
     }
 
-    function changeStatus($id, $status)
+    function changeStatus($id, $status, $billing)
     {
         include 'ConnectionController.php';
+        date_default_timezone_set('Asia/Jakarta');
         $uid = $_SESSION['id'];
 
         try {
             if ($status == 'unavailable') {
+                if ($billing == '') {
+                    $error = "Billing tidak Boleh Kosong!";
+                    header("Location: /warnet.ku/views/computer.php?error=$error");
+                    exit();
+                } else {
+                    $time = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s')) + 60 * $billing);
+                }
                 $success = "Mulai Menggunakan Komputer";
                 $query = "SELECT * FROM computers WHERE id = '$id'";
                 $result = mysqli_query($conn, $query);
@@ -108,11 +116,11 @@ class ComputerController
                 $result = mysqli_query($conn, $query);
                 if ($result->num_rows > 0) {
                     $row = $result->fetch_assoc();
-                    if ($row['user'] == 0){
+                    if ($row['user'] == 0) {
                         $error = "Komputer telah Dihentikan Admin!";
                         header("Location: /warnet.ku/views/computer.php?error=$error");
                         exit();
-                    }else if ($row['user'] != $uid) {
+                    } else if ($row['user'] != $uid) {
                         $error = "Hanya bisa mengedit komputer anda!";
                         header("Location: /warnet.ku/views/computer.php?error=$error");
                         exit();
@@ -120,9 +128,10 @@ class ComputerController
                 }
                 $success = "Selesai Menggunakan Komputer";
                 $uid = 0;
+                $time = null;
             }
 
-            $query = "UPDATE computers SET status = '$status', user = $uid WHERE id = '$id'";
+            $query = "UPDATE computers SET status = '$status', user = $uid, time = '$time' WHERE id = '$id'";
             $result = mysqli_query($conn, $query);
 
             if ($result) {
@@ -140,9 +149,9 @@ class ComputerController
     function stopComputer($id)
     {
         include 'ConnectionController.php';
-
+        $time = null;
         try {
-            $query = "UPDATE computers SET status = 'available', user = 0 WHERE id = '$id'";
+            $query = "UPDATE computers SET status = 'available', user = 0, time = '$time' WHERE id = '$id'";
             $result = mysqli_query($conn, $query);
 
             if ($result) {

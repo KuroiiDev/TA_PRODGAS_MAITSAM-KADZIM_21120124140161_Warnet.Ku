@@ -11,7 +11,8 @@ foreach ($computers as $computer) {
         'id' => $computer['id'],
         'name' => $computer['name'],
         'status' => $computer['status'],
-        'user_id' => $computer['user'],
+        'user' => $computer['user'],
+        'time' => $computer['time'],
         'notRenting' => $com->notRenting(),
         'isCurrentUser' => isset($_SESSION['id']) && $_SESSION['id'] == $computer['user'],
     ];

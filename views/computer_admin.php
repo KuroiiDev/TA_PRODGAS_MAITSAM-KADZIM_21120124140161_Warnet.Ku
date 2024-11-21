@@ -2,6 +2,7 @@
 $user = "-";
 session_start();
 
+date_default_timezone_set('Asia/Jakarta');
 $serverTime = date('Y-m-d H:i:s');
 
 if (!isset($_SESSION['id'])) {
@@ -76,7 +77,6 @@ if (isset($_POST['submit-stop'])) {
             <span id="current-time"></span>
         </div>
         <script>
-            // Ambil waktu server dari PHP
             const serverTime = new Date("<?php echo $serverTime; ?>");
 
             function updateClock() {
@@ -160,6 +160,43 @@ if (isset($_POST['submit-stop'])) {
                             const statusText = computer.status === 'available' ? 'Tersedia' : 'Digunakan';
                             const user = computer.status === 'available' ? '' : `<p class="card-text">${computer.user_name}</p>`;
 
+                            let actionForms = '';
+                            if (computer.status === 'available') {
+                                actionForms = `
+                                <form method="POST" id="delete-${computer.id}">
+                                    <input type="hidden" name="computer_id" value="${computer.id}">
+                                    <button type="submit" class="btn btn-danger btn-sm" name="submit-del">Hapus</button>
+                                </form>
+                                `;
+                            } else {
+                                let countdown = '';
+                                if (computer.time) {
+                                    const stopTime = new Date(computer.time);
+                                    countdown = `<p class="card-text text-warning" id="countdown-${computer.id}">...</p>`;
+
+                                    setInterval(() => {
+                                        const now = new Date();
+                                        const diff = stopTime - now;
+
+                                        if (diff > 0) {
+                                            const minutes = Math.floor(diff / (1000 * 60));
+                                            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+                                            document.getElementById(`countdown-${computer.id}`).textContent =
+                                                `${minutes} menit ${seconds} detik`;
+                                        } else {
+                                            document.getElementById(`countdown-${computer.id}`).textContent = 'Waktu Habis!';
+                                            //document.getElementById(`stop-${computer.id}`).submit();
+                                        }
+                                    }, 1000);
+                                }
+                                actionForms = `
+                                ${countdown}
+                                <form method="POST" id="stop-${computer.id}">
+                                    <input type="hidden" name="computer_id" value="${computer.id}">
+                                    <button type="submit" class="btn btn-primary btn-sm" name="submit-stop">Hentikan!</button>
+                                </form>`;
+                            }
+
                             computerContainer.innerHTML += `
                             <div class="col">
                                 <div class="card text-light computer">
@@ -172,12 +209,7 @@ if (isset($_POST['submit-stop'])) {
                                                 <h5 class="card-title">${computer.name}</h5>
                                                 <p class="card-text">Status: <span class="badge bg-${statusColor}">${statusText}</span></p>
                                                 ${user}
-                                                <form method="POST">
-                                                    <input type="hidden" name="computer_id" value="${computer.id}">
-                                                    ${computer.status === 'available' ? `
-                                                        <button type="submit" class="btn btn-danger btn-sm" name="submit-del">Hapus</button>` : `
-                                                        <button type="submit" class="btn btn-primary btn-sm" name="submit-stop">Hentikan!</button>`}
-                                                </form>
+                                                ${actionForms}
                                             </div>
                                         </div>
                                     </div>

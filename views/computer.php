@@ -19,7 +19,7 @@ include_once '../controllers/ComputerController.php';
 $com = new ComputerController();
 $computers = $com->getComputers();
 if (isset($_POST['submit'])) {
-    $com->changeStatus($_POST['computer_id'], $_POST['computer_status']);
+    $com->changeStatus($_POST['computer_id'], $_POST['computer_status'], $_POST['computer_time']);
 }
 ?>
 
@@ -85,7 +85,7 @@ if (isset($_POST['submit'])) {
                     alert.classList.add('fade');
                     setTimeout(() => alert.remove(), 500);
                 });
-            }, 3000);
+            }, 10000);
         </script>
         <div class="row row-cols-lg-3 g-4 computer-container">
             <!-- Diisi Pake Js -->
@@ -111,6 +111,10 @@ if (isset($_POST['submit'])) {
                             if (computer.status === 'available' && computer.notRenting) {
                                 actionButtons = `
                                 <input type="hidden" name="computer_status" value="unavailable">
+                                <div class="input-group mb-3">
+                                    <input type="number" class="form-control bg-dark text-light" name="computer_time" aria-describedby="basic-addon2">
+                                    <span class="input-group-text bg-dark text-light" id="basic-addon2">Menit</span>
+                                </div>
                                 <button type="submit" class="btn btn-primary btn-sm" name="submit">Pilih</button>
                             `;
                             } else if (computer.isCurrentUser) {
@@ -147,7 +151,7 @@ if (isset($_POST['submit'])) {
                 .catch(error => console.error('Error:', error));
         }
 
-        setInterval(loadComputers, 3000);
+        setInterval(loadComputers, 10000);
         loadComputers();
     </script>
 
