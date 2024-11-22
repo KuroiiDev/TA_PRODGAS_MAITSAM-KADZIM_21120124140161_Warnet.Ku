@@ -93,8 +93,8 @@ class ComputerController
 
         try {
             if ($status == 'unavailable') {
-                if ($billing == '') {
-                    $error = "Billing tidak Boleh Kosong!";
+                if ($billing == '' || $billing <= 0) {
+                    $error = "Billing tidak Boleh Kosong atau kurang dari 1!";
                     header("Location: /warnet.ku/views/computer.php?error=$error");
                     exit();
                 } else {

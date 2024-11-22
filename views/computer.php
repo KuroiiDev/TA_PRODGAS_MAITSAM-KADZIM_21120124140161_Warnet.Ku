@@ -150,7 +150,7 @@ if (isset($_POST['submit'])) {
                 .catch(error => console.error('Error:', error));
         }
 
-        setInterval(loadComputers, 10000);
+        setInterval(loadComputers, 5000);
         loadComputers();
     </script>
 
