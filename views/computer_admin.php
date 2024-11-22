@@ -172,21 +172,28 @@ if (isset($_POST['submit-stop'])) {
                                 let countdown = '';
                                 if (computer.time) {
                                     const stopTime = new Date(computer.time);
-                                    countdown = `<p class="card-text text-warning" id="countdown-${computer.id}">...</p>`;
+                                    countdown = `<p class="card-text text-warning fs-6 fw-light" id="countdown-${computer.id}">...</p>`;
 
                                     setInterval(() => {
                                         const now = new Date();
                                         const diff = stopTime - now;
+                                        // diff berisi satuan miliseconds
 
                                         if (diff > 0) {
+                                            // Kasih Note rumus dlu biar gak lupa :D
+                                            
+                                            const hours = Math.floor(diff / (1000 * 60 * 60));
+                                            // Jam = pembulatan dari Perbedaan(miliseconds) dibagi 1,000 x 60 x 60, atau 3,600,000
                                             const minutes = Math.floor(diff / (1000 * 60));
+                                            // Menit = pembulatan dari Perbedaan(miliseconds) dibagi 1,000 x 60, atau 60,000
                                             const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+                                            // Detik = pembulatan dari sisa pembagian menit dibagi 1,000
+
                                             document.getElementById(`countdown-${computer.id}`).textContent =
-                                                `${minutes} menit ${seconds} detik`;
+                                                `${hours} jam ${minutes} menit ${seconds} detik`;
                                         } else {
                                             document.getElementById(`countdown-${computer.id}`).textContent = 'Waktu Habis!';
                                             stopComputer(computer.id);
-                                            //document.getElementById(`stop-${computer.id}`).submit();
                                         }
                                     }, 1000);
                                 }
